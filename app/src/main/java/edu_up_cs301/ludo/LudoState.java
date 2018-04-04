@@ -58,14 +58,14 @@ public class LudoState extends GameState {
                 new Token(1, 13.5, 3), //green piece2
                 new Token(1, 12, 4.5), //green piece3
                 new Token(1, 10.5, 3), //green piece4
-                new Token(2, 3, 10.5), //blue piece1
-                new Token(2, 4.5, 12), //blue piece2
-                new Token(2, 3, 13.5), //blue piece3
-                new Token(2, 1.5, 12), //blue piece4
-                new Token(3, 12, 10.5), //yellow piece1
-                new Token(3, 13.5, 12), //yellow piece2
-                new Token(3, 12, 13.5), //yellow piece3
-                new Token(3, 10.5, 12)}; //yellow piece4
+                new Token(2, 12, 10.5), //yellow piece1
+                new Token(2, 13.5, 12), //yellow piece2
+                new Token(2, 12, 13.5), //yellow piece3
+                new Token(2, 10.5, 12), //yellow piece4
+                new Token(3, 3, 10.5), //blue piece1
+                new Token(3, 4.5, 12), //blue piece2
+                new Token(3, 3, 13.5), //blue piece3
+                new Token(3, 1.5, 12)}; //blue piece4
 
         //scores are 0;
         playerScore = new int[]{0, 0, 0, 0};
@@ -184,14 +184,6 @@ public class LudoState extends GameState {
         }
 
         return oneTrue;
-
-//        //check if any moves are available
-//        for (int i = playerID_active; i < 16; i += 4) {
-//            if(pieces[i].getIsMovable()){
-//                return true;
-//            }
-//        }
-//        return false;
     }
 
     /**
@@ -217,16 +209,17 @@ public class LudoState extends GameState {
      * @param spacesTraveled
      * @return
      */
-    public Token getTokenByTravelDistance(int spacesTraveled) {
 
-        //only iterates through players' 4 Tokens
-        for (int i = playerID_active; i < 16; i += 4) {
-            if (pieces[i].getOwner() == playerID_active && pieces[i].getNumSpacesMoved() == spacesTraveled) {
-                return pieces[i];
-            }
-        }
-        return null;
-    }
+//    public Token getTokenByTravelDistance(int spacesTraveled) {
+//
+//        //only iterates through players' 4 Tokens
+//        for (int i = playerID_active; i < 16; i += 4) {
+//            if (pieces[i].getOwner() == playerID_active && pieces[i].getNumSpacesMoved() == spacesTraveled) {
+//                return pieces[i];
+//            }
+//        }
+//        return null;
+//    }
 
     /**fixed by Avery Guillermo!
      *
@@ -346,7 +339,7 @@ public class LudoState extends GameState {
         this.isRollable = bol;
     }
 
-    //TODO:When Player's piece enters home base, add a point to the player
+
     /**Edited by Avery Guillermo
      *
      * @param playerID
@@ -355,26 +348,20 @@ public class LudoState extends GameState {
      */
     public boolean advanceToken(int playerID, int index) {
 
-        //must be players turn
-        if(playerID != playerID_active){
-            return false;
-        }
-
-
         int indexOfCurrentToken = index;
 
         //only act on movable pieces. Always updated after each dice roll.
         if(pieces[indexOfCurrentToken].getIsMovable()) {
 
-            //piece selected needs to be moved out to start.
-            if (pieces[indexOfCurrentToken].getIsHome()) {
-                pieces[indexOfCurrentToken].setIsHome(false);
-                return true;
-            }
+//            //piece selected needs to be moved out to start.
+//            if (pieces[indexOfCurrentToken].getIsHome()) {
+//                pieces[indexOfCurrentToken].setIsHome(false);
+//                return true;
+//            }
 
             int currentLocation = pieces[indexOfCurrentToken].getNumSpacesMoved();
             int homeBaseLocation = 56;
-            //Inside homestrech
+            //Inside homestretch
             if(currentLocation>50){
                 if(diceVal+currentLocation == homeBaseLocation){
                     pieces[indexOfCurrentToken].incNumSpacesMoved(diceVal);
@@ -391,11 +378,12 @@ public class LudoState extends GameState {
                 pieces[indexOfCurrentToken].incNumSpacesMoved(diceVal);
             }
 
+
+
             int spacesPieceHasTraveled = pieces[indexOfCurrentToken].getNumSpacesMoved();
 
-            // check for overlap.
-            // above 50 and it has entered home stretch and does not need to worry about overlap
-            if (spacesPieceHasTraveled < 51) {
+            // check for overlap on non-safe tiles
+            if (spacesPieceHasTraveled < 51) {// 51 is the number of tiles till homestretch
 
                 //consider where piece is
                 switch (spacesPieceHasTraveled) {
@@ -423,6 +411,10 @@ public class LudoState extends GameState {
                         }
                 }
             }
+            //Now that we have moved the token, change the current player's turn!
+            if(diceVal !=6 && this.getNumMovableTokens(playerID) > 1){
+                changePlayerTurn();
+            }
             return true;
         }
         else {
@@ -444,6 +436,8 @@ public class LudoState extends GameState {
     }
 
     //implemented by Avery!
+    //used for the computer player!
+    //TODO: Optimize this so that it gets the furthest piece out of start!
     public int getTokenIndexOfFirstPieceOutOfStart(int playerID){
         for(int i = (playerID*4); i<(playerID*4 + 4); i++){//traverse through the only the pieces the player owns
             if(pieces[i].getIsHome() == false && pieces[i].getReachedHomeBase() == false){

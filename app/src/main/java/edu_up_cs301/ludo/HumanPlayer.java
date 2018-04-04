@@ -33,10 +33,6 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
 
     private LudoSurfaceView surfaceView;
     private Button rollDiceButton;
-    private int[][] redPath;
-    private int[][] greenPath;
-    private int[][] bluePath;
-    private int[][] yellowPath;
 
     // most recent state, an appropriately filled view of the game as given to us from LudoLocalGame
 
@@ -55,56 +51,8 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
      */
     public HumanPlayer(String name) {
         super(name);
-        generalInit();
     }
 
-    private void generalInit() {
-
-        redPath = new int[][]{{1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {8, 0},
-                {8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {14, 8}, {13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {6, 14}, {6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7}};
-
-        greenPath = new int[][]{{8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {14, 8}, {13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {6, 14}, {6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {0, 6}, {1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {7, 1}, {7, 2},
-                {7, 3}, {7, 4}, {7, 5}, {7, 6}};
-
-        bluePath = new int[][]{{6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {0, 6}, {1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {8, 0},
-                {8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {14, 8}, {13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {7, 13}, {7, 12}, {7, 11}, {7, 10}, {7, 9}, {7, 8}};
-
-        yellowPath = new int[][]{{13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {6, 14}, {6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {0, 6}, {1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {8, 0},
-                {8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {13, 7}, {12, 7}, {11, 7}, {10, 7}, {9, 7}, {8, 7}};
-
-    }
 
     /**
      * Sets this player as the one attached to the GUI. Saves the
@@ -195,18 +143,6 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
             }
         }
 
-/*
-        switch(v.getId()){
-            case R.id.board_canvas: // if surfaceView is pressed, tell the game
-                state.newRoll();
-                action = new ActionMoveToken(this, index);
-                game.sendAction(action);
-                return true;
-        }
-        */
-
-
-
         return false;
     }
 
@@ -219,33 +155,36 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         for(int i =0; i<16; i++) { //traverse through all the pieces
             if (aHomeBaseWasTouched == false) {//check the board tiles
                 if (state.pieces[i].getOwner() == 0) {//use the red path
-                    xPos = (redPath[state.pieces[i].getNumSpacesMoved()][0]) * box;
-                    yPos = (redPath[state.pieces[i].getNumSpacesMoved()][1]) * box;
+                    xPos = (state.pieces[i].getCurrentXLoc() * box);
+                    yPos = (state.pieces[i].getCurrentYLoc() * box);
                     if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
                         if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
                             return i;
                         }
                     }
-                } if (state.pieces[i].getOwner() == 1) {//use the green path
-                    xPos = (greenPath[state.pieces[i].getNumSpacesMoved()][0]) * box;
-                    yPos = (greenPath[state.pieces[i].getNumSpacesMoved()][1]) * box;
+                }
+                if (state.pieces[i].getOwner() == 1) {//use the green path
+                    xPos = (state.pieces[i].getCurrentXLoc() * box);
+                    yPos = (state.pieces[i].getCurrentYLoc() * box);
                     if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
                         if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
                             return i;
                         }
                     }
 
-                } if (state.pieces[i].getOwner() == 2) {//use the blue path
-                    xPos = (bluePath[state.pieces[i].getNumSpacesMoved()][0]) * box;
-                    yPos = (bluePath[state.pieces[i].getNumSpacesMoved()][1]) * box;
+                }
+                if (state.pieces[i].getOwner() == 2) {//use the yellow path
+                    xPos = (state.pieces[i].getCurrentXLoc() * box);
+                    yPos = (state.pieces[i].getCurrentYLoc() * box);
                     if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
                         if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
                             return i;
                         }
                     }
-                } if (state.pieces[i].getOwner() == 3) {//use the yellow path
-                    xPos = (yellowPath[state.pieces[i].getNumSpacesMoved()][0]) * box;
-                    yPos = (yellowPath[state.pieces[i].getNumSpacesMoved()][1]) * box;
+                }
+                if (state.pieces[i].getOwner() == 3) {//use the blue path
+                    xPos = (state.pieces[i].getCurrentXLoc() * box);
+                    yPos = (state.pieces[i].getCurrentYLoc() * box);
                     if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
                         if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
                             return i;

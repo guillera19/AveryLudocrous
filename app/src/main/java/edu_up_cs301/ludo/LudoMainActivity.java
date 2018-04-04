@@ -28,7 +28,7 @@ public class LudoMainActivity extends GameMainActivity {
         // Define the allowed player types
         ArrayList<GamePlayerType> playerTypes = new ArrayList<GamePlayerType>();
 
-        // Pig has two player types:  human and computer
+        // Ludo has two player types:  human and computer
         playerTypes.add(new GamePlayerType("Local Human") {
             public GamePlayer createPlayer(String name) {
                 return new HumanPlayer(name);

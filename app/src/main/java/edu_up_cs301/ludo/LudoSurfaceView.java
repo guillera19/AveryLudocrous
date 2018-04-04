@@ -136,7 +136,7 @@ public class LudoSurfaceView extends FlashSurfaceView {
             canvas.drawRect(i, j, (float) (i + box), (float) (j + box), redPaint);
         } //Red Homestretch
         canvas.drawRect(box, (box * 6), (box * 2), (box * 7), redPaint); //Red Open Tile
-        for (i = (box * 9); i < (box * 14); i = i + box) {
+        for (i = (box * 9); i < (box * 13); i = i + box) {
             j = (box * 7);
             canvas.drawRect(i, j, (float) (i + box), (float) (j + box), yellowPaint);
         } //Yellow Homestretch
@@ -146,7 +146,7 @@ public class LudoSurfaceView extends FlashSurfaceView {
             canvas.drawRect(i, j, (float) (i + box), (float) (j + box), greenPaint);
         } //Green Homestretch
         canvas.drawRect((box * 8), box, (box * 9), (box * 2), greenPaint); //Green Open Tile
-        for (j = (box * 9); j < (box * 14); j = j + box) {
+        for (j = (box * 9); j < (box * 13); j = j + box) {
             i = (box * 7);
             canvas.drawRect(i, j, (float) (i + box), (float) (j + box), bluePaint);
         } //Blue Homestretch
@@ -273,14 +273,9 @@ public class LudoSurfaceView extends FlashSurfaceView {
         //draw all the pieces
         drawPieces(canvas, box);
 
-
-        drawDice(0f,0f,canvas, box); //draw red dice
-        drawDice((box*9),0f,canvas, box); //draw green dice
-        drawDice(0f,(box*9),canvas, box); //draw blue dice
-        drawDice((box*9),(box*9),canvas, box); //draw yellow dice
-
-
+        drawDice(canvas, box); //draw the dice
     }
+
 
 
     public void drawStar(int xPos,  int yPos, Canvas canvas, float box){
@@ -322,21 +317,111 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
     }
 
-    //TODO: Draw the different Dice Values!!!! Right now it only draws the number 3
-    public void drawDice(float xPos, float yPos, Canvas canvas, float box){
-        Paint greyPaint = new Paint();
-        Paint redPaint = new Paint();
-        greyPaint.setColor(Color.rgb(100,100,100));
-        redPaint.setColor(Color.rgb(255,0,0));
 
+    public void drawDice(Canvas canvas, float box){
+        Paint greyPaint = new Paint();         greyPaint.setColor(Color.rgb(100,100,100));
+        Paint redPaint = new Paint();          redPaint.setColor(Color.rgb(255,0,0));
+        Paint greenPaint = new Paint();        greenPaint.setColor(Color.rgb(0,255,0));
+        Paint bluePaint = new Paint();         bluePaint.setColor(Color.rgb(0,0,255));
+        Paint yellowPaint = new Paint();       yellowPaint.setColor(Color.rgb(255,255,0));
+        Paint blackPaint = new Paint();        blackPaint.setColor(Color.rgb(0,0,0));
 
-        //Drawing the Face of Die
-        canvas.drawRect(xPos + (float)(box*2.3) , yPos + (float)(box*2.3), xPos + (float)(box*3.7), yPos+ (float)(box*3.7), greyPaint);
+//        Log.i("\nWho's Move is it:"," "+state.getWhoseMove()+"\n");
+//        Log.i("","XPOS"+xPos+"   YPOS:"+yPos);
+        clearDice(canvas,box);
+        if(state.getDiceVal()==6) {
+            switch (state.getWhoseMove()) {
+                case 0:
+                    canvas.drawRect((float) (box * 2.3), (float) (box * 2.3), (float) (box * 3.7), (float) (box * 3.7), redPaint);
+                    drawDots(0, 0, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
 
-        //Drawing the Dots
-        canvas.drawCircle(xPos + (float)(box*3.3), yPos + (float)(box*2.7),12,redPaint);
-        canvas.drawCircle(xPos + (float)(box*3), yPos + (float)(box*3),12,redPaint);
-        canvas.drawCircle(xPos + (float)(box*2.7), yPos + (float)(box*3.3),12,redPaint);
+                case 1:
+                    canvas.drawRect(((float) ((box * 11.3))), (float) (box * 2.3), ((float) ((box * 12.7))), (float) (box * 3.7), greenPaint);
+                    drawDots(box * 9, 0, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
+                case 2:
+                    canvas.drawRect(((float) ((box * 11.3))), ((float) ((box * 11.3))), ((float) ((box * 12.7))), ((float) ((box * 12.7))), yellowPaint);
+                    drawDots(box * 9, box * 9, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
+                case 3:
+                    canvas.drawRect(((float) ((box * 2.3))), ((float) ((box * 11.3))), ((float) (box * 3.7)), ((float) ((box * 12.7))), bluePaint);
+                    drawDots(0, box * 9, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
+            }
+        }
+        else {
+            switch (state.getWhoseMove() - 1) {
+                case 0:
+                    canvas.drawRect((float) (box * 2.3), (float) (box * 2.3), (float) (box * 3.7), (float) (box * 3.7), redPaint);
+                    drawDots(0, 0, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
+
+                case 1:
+                    canvas.drawRect(((float) ((box * 11.3))), (float) (box * 2.3), ((float) ((box * 12.7))), (float) (box * 3.7), greenPaint);
+                    drawDots(box * 9, 0, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
+                case 2:
+                    canvas.drawRect(((float) ((box * 11.3))), ((float) ((box * 11.3))), ((float) ((box * 12.7))), ((float) ((box * 12.7))), yellowPaint);
+                    drawDots(box * 9, box * 9, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
+                case -1:
+                    canvas.drawRect(((float) ((box * 2.3))), ((float) ((box * 11.3))), ((float) (box * 3.7)), ((float) ((box * 12.7))), bluePaint);
+                    drawDots(0, box * 9, box, state.getDiceVal(), canvas, blackPaint);
+                    break;
+
+            }
+        }
+    }
+
+    public void drawDots(float xPos, float yPos, float shift ,int diceVal,Canvas canvas, Paint color){
+        switch (diceVal){
+            case 1:
+                canvas.drawCircle(xPos+ shift*3,yPos+ shift*3,18,color);
+                break;
+            case 2:
+                canvas.drawCircle(xPos + (float)(shift*2.7), yPos + (float)(shift*2.7),18,color);
+                canvas.drawCircle(xPos + (float)(shift*3.3), yPos + (float)(shift*3.3),18,color);
+                break;
+            case 3:
+                canvas.drawCircle(xPos + (float)(shift*2.7), yPos + (float)(shift*2.7),18,color);
+                canvas.drawCircle(xPos + (float)(shift*3.3), yPos + (float)(shift*3.3),18,color);
+                canvas.drawCircle(xPos + (float)(shift*3), yPos + (float)(shift*3),18,color);
+                break;
+            case 4:
+                canvas.drawCircle(xPos + (float)(shift*2.7), yPos + (float)(shift*2.7),15,color);
+                canvas.drawCircle(xPos + (float)(shift*2.7), yPos + (float)(shift*3.3),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3.3), yPos + (float)(shift*2.7),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3.3), yPos + (float)(shift*3.3),15,color);
+                break;
+            case 5:
+                canvas.drawCircle(xPos + (float)(shift*2.6), yPos + (float)(shift*2.6),15,color);
+                canvas.drawCircle(xPos + (float)(shift*2.6), yPos + (float)(shift*3.4),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3.4), yPos + (float)(shift*2.6),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3.4), yPos + (float)(shift*3.4),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3), yPos + (float)(shift*3),15,color);
+                break;
+            case 6:
+                canvas.drawCircle(xPos + (float)(shift*2.6), yPos + (float)(shift*2.6),15,color);
+                canvas.drawCircle(xPos + (float)(shift*2.6), yPos + (float)(shift*3.4),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3.4), yPos + (float)(shift*2.6),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3.4), yPos + (float)(shift*3.4),15,color);
+                canvas.drawCircle(xPos + (float)(shift*2.6), yPos + (float)(shift*3),15,color);
+                canvas.drawCircle(xPos + (float)(shift*3.4), yPos + (float)(shift*3),15,color);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void clearDice(Canvas canvas, float box){
+        Paint whitePaint = new Paint();
+        whitePaint.setColor(Color.rgb(255,255,255));
+        canvas.drawRect((float)(box*2.3) , (float)(box*2.3), (float)(box*3.7), (float)(box*3.7), whitePaint);
+        canvas.drawRect(((float)(883.19995 + (box*2.3))), (float)(box*2.3), ((float)(883.19995 + (box*3.7))), (float)(box*3.7), whitePaint);
+        canvas.drawRect(((float)((box*2.3))), ((float)(883.19995+(box*2.3))), ((float)(box*3.7)),((float)(883.19995+(box*3.7))), whitePaint);
+        canvas.drawRect(((float)(883.19995 + (box*2.3))),((float)(883.19995+(box*2.3))),((float)(883.19995 + (box*3.7))),((float)(883.19995+(box*3.7))),whitePaint);
+
 
     }
 
@@ -385,17 +470,18 @@ public class LudoSurfaceView extends FlashSurfaceView {
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,25,greenPaint);
 
                 }
-                if(state.pieces[i].getOwner() ==2){//use the blue path
-                    xPos = bluePath[state.pieces[i].getNumSpacesMoved()][0];
-                    yPos = bluePath[state.pieces[i].getNumSpacesMoved()][1];
-                    canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,30,whitePaint);
-                    canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,25,bluePaint);
-                }
-                if(state.pieces[i].getOwner() ==3){//use the yellow path
+                if(state.pieces[i].getOwner() ==2){//use the yellow path
                     xPos = yellowPath[state.pieces[i].getNumSpacesMoved()][0];
                     yPos = yellowPath[state.pieces[i].getNumSpacesMoved()][1];
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,30,whitePaint);
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,25,yellowPaint);
+
+                }
+                if(state.pieces[i].getOwner() ==3){//use the blue path
+                    xPos = bluePath[state.pieces[i].getNumSpacesMoved()][0];
+                    yPos = bluePath[state.pieces[i].getNumSpacesMoved()][1];
+                    canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,30,whitePaint);
+                    canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,25,bluePaint);
                 }
             }
             else{//draw the pieces in the start square
@@ -413,17 +499,17 @@ public class LudoSurfaceView extends FlashSurfaceView {
                     canvas.drawCircle(x,y,25,greenPaint);
 
                 }
-                if(state.pieces[i].getOwner() ==2){//blue piece
-                    x = (float) state.pieces[i].getStartXPos() * box;
-                    y = (float) state.pieces[i].getStartYPos() * box;
-                    canvas.drawCircle(x,y,30,whitePaint);
-                    canvas.drawCircle(x,y,25,bluePaint);
-                }
-                if(state.pieces[i].getOwner() ==3){//yellow piece
+                if(state.pieces[i].getOwner() ==2){//yellow piece
                     x = (float) state.pieces[i].getStartXPos() * box;
                     y = (float) state.pieces[i].getStartYPos() * box;
                     canvas.drawCircle(x,y,30,whitePaint);
                     canvas.drawCircle(x,y,25,yellowPaint);
+                }
+                if(state.pieces[i].getOwner() ==3){//blue piece
+                    x = (float) state.pieces[i].getStartXPos() * box;
+                    y = (float) state.pieces[i].getStartYPos() * box;
+                    canvas.drawCircle(x,y,30,whitePaint);
+                    canvas.drawCircle(x,y,25,bluePaint);
                 }
             }
         }
