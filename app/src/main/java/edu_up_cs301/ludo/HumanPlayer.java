@@ -36,7 +36,7 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
 
     // most recent state, an appropriately filled view of the game as given to us from LudoLocalGame
 
-    private LudoState state = new LudoState(); //IMPORTANT! For Now, create a new Ludo State
+    private LudoState state;
 
     // the android activity that we are running
     private GameMainActivity myActivity;
@@ -130,8 +130,6 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
             }
             else{
                 Log.i("OnTouch", "The piece that was touched was: " + index);
-                //TODO: send game actions here now that we have the id of the pieces array of the piece that was pressed
-                //TODO: can either send move piece actions or move piece out of start depending on the if the base is out of start
                 if(checkIfAHomeBaseWasTouched(xTouch, yTouch,box)==false){ //the user is trying to move a piece forward
                     action = new ActionMoveToken(this, index);
                     game.sendAction(action);

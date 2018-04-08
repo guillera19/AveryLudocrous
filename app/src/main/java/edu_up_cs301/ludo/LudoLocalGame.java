@@ -75,7 +75,6 @@ public class LudoLocalGame extends LocalGame {
         int playerID;
         //if its the person's turn and they are trying to make a move
         if (canMove(playerID = getPlayerIdx(action.getPlayer()))) {
-            //if(((action.getPlayer()). )
             if (action instanceof ActionMoveToken && state.getNumMovableTokens(playerID) > 1) {
                 //move forward, consider and react to landing on another piece
                 return state.advanceToken(playerID, ((ActionMoveToken) action).getIndex());
@@ -97,17 +96,18 @@ public class LudoLocalGame extends LocalGame {
                     state.setIsRollable(false);
                     int index = state.getTokenIndexOfFirstPieceOutOfStart(playerID);
                     state.advanceToken(playerID, index);
-                    state.changePlayerTurn();
                     return true;
                 }
                 //if the player did not roll a six but can move multiple pieces
                 if(state.getDiceVal() !=6 && state.getNumMovableTokens(playerID) > 1){
                     state.setIsRollable(false);
+                    state.setStillPlayersTurn(true);
                     return true;
                 }
 
-                //if the player rolls a six, let them take a piece out of base
+                //if the player rolls a six, let them take a piece out of base or move a piece
                 if(state.getDiceVal() ==6 && state.getTokenIndexOfFirstPieceInStart(playerID) >=0){
+                    state.setStillPlayersTurn(true);
                     return true;
                 }
 
@@ -117,6 +117,7 @@ public class LudoLocalGame extends LocalGame {
             else if (action instanceof ActionRemoveFromBase && state.getDiceVal() == 6) {
                 //toggle boolean to false
                 state.pieces[((ActionRemoveFromBase) action).getIndex()].setIsHome(false);
+                state.setStillPlayersTurn(true);
                 return true;
 
             }

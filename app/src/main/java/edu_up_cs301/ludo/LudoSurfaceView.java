@@ -326,11 +326,10 @@ public class LudoSurfaceView extends FlashSurfaceView {
         Paint yellowPaint = new Paint();       yellowPaint.setColor(Color.rgb(255,255,0));
         Paint blackPaint = new Paint();        blackPaint.setColor(Color.rgb(0,0,0));
 
-//        Log.i("\nWho's Move is it:"," "+state.getWhoseMove()+"\n");
-//        Log.i("","XPOS"+xPos+"   YPOS:"+yPos);
         clearDice(canvas,box);
-        if(state.getDiceVal()==6) {
-            switch (state.getWhoseMove()) {
+        int currentPlayer = state.getWhoseMove();
+        if(state.stillPlayersTurn == true)  {
+            switch (state.getWhoseMove()) { //don't shift where the dice is drawn
                 case 0:
                     canvas.drawRect((float) (box * 2.3), (float) (box * 2.3), (float) (box * 3.7), (float) (box * 3.7), redPaint);
                     drawDots(0, 0, box, state.getDiceVal(), canvas, blackPaint);
@@ -350,8 +349,9 @@ public class LudoSurfaceView extends FlashSurfaceView {
                     break;
             }
         }
-        else {
-            switch (state.getWhoseMove() - 1) {
+        //else diceVal != 6 then shift
+        else { //draw with a shift to reflect GUI Change
+            switch (state.getWhoseMove() - 1) { //shift where the dice is drawn
                 case 0:
                     canvas.drawRect((float) (box * 2.3), (float) (box * 2.3), (float) (box * 3.7), (float) (box * 3.7), redPaint);
                     drawDots(0, 0, box, state.getDiceVal(), canvas, blackPaint);
@@ -369,7 +369,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
                     canvas.drawRect(((float) ((box * 2.3))), ((float) ((box * 11.3))), ((float) (box * 3.7)), ((float) ((box * 12.7))), bluePaint);
                     drawDots(0, box * 9, box, state.getDiceVal(), canvas, blackPaint);
                     break;
-
             }
         }
     }

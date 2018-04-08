@@ -35,6 +35,7 @@ public class LudoState extends GameState {
     private int numPlayers;
     private int playerID_active;
     private int[] playerScore;
+    public boolean stillPlayersTurn = false;
 
     /**
      * Fixed by Avery Guillermo!
@@ -85,6 +86,7 @@ public class LudoState extends GameState {
         this.dice = original.dice;
         this.diceVal = original.diceVal;
         this.isRollable = original.isRollable;
+        this.stillPlayersTurn = original.stillPlayersTurn;
 
         //set the piece array
         this.pieces = new Token[original.pieces.length];
@@ -142,9 +144,9 @@ public class LudoState extends GameState {
                 default:
                     isRollable = !isRollable;
             }
-
             //if no moves exist based on diceVal just go to next player
-            return updateMovesAvailable();
+            updateMovesAvailable();
+            return true;
         }
         return false;
     }
@@ -241,51 +243,6 @@ public class LudoState extends GameState {
     }
 
 
-//    /**
-//     * helper method to get relevant pieces
-//     *
-//     * @param playerID
-//     * @return only the 4 pieces owned by the player
-//     */
-//    public Token[] getMyTokens(int playerID) {
-//        ArrayList<Token> myPieces = new ArrayList<>();
-//
-//        //only iterates through players' 4 Tokens
-//        for (int i = playerID; i < 16; i += 4) {
-//            if (pieces[i].getOwner() == playerID && myPieces.size() < 4) {
-//                myPieces.add(pieces[i]);
-//            }
-//        }
-//        return (Token[]) myPieces.toArray();
-//    }
-
-//    /**
-//     * helper method to get relevant pieces
-//     *
-//     * @param playerID
-//     * @return only the 4 pieces owned by the player
-//     */
-//    private Token[] getPlayerActiveTokens(int playerID) {
-//        ArrayList<Token> myPieces = new ArrayList<>();
-//
-//        //only iterates through players' 4 Tokens
-//        for (int i = playerID; i < 16; i += 4) {
-//            if (pieces[i].getOwner() == playerID && myPieces.size() < 4) {
-//                myPieces.add(pieces[i]);
-//            }
-//        }
-//        return (Token[]) myPieces.toArray();
-//    }
-
-
-//    public ArrayList<Token> isTokenWithinDiceValueOfMyTokensInPlay(int playerID) {
-//
-//        for (int i = 0; i < 16; i++) {
-//
-//        }
-//        return null;
-//    }
-
     /**
      * increments player score
      */
@@ -310,25 +267,10 @@ public class LudoState extends GameState {
         return count;
     }
 
-    /**
-     * Fixed By Avery Guillermo!
-     *
-     * Increments the current player if they have no more rolls
-     * @return true if incremented to next player
-     */
-    public boolean tryNextPlayerActive() {
-
-        if(isRollable) {
-            return false;
-        } //no more rolls
-        else {
-            this.changePlayerTurn();
-            return true;
-        }
-    }
-
     //implemented by Avery
     public void changePlayerTurn(){
+        this.stillPlayersTurn = false;
+
         if ((++playerID_active) >= numPlayers) {
             playerID_active = 0;
         }
@@ -353,12 +295,6 @@ public class LudoState extends GameState {
         //only act on movable pieces. Always updated after each dice roll.
         if(pieces[indexOfCurrentToken].getIsMovable()) {
 
-//            //piece selected needs to be moved out to start.
-//            if (pieces[indexOfCurrentToken].getIsHome()) {
-//                pieces[indexOfCurrentToken].setIsHome(false);
-//                return true;
-//            }
-
             int currentLocation = pieces[indexOfCurrentToken].getNumSpacesMoved();
             int homeBaseLocation = 56;
             //Inside homestretch
@@ -377,7 +313,6 @@ public class LudoState extends GameState {
             else{
                 pieces[indexOfCurrentToken].incNumSpacesMoved(diceVal);
             }
-
 
 
             int spacesPieceHasTraveled = pieces[indexOfCurrentToken].getNumSpacesMoved();
@@ -412,13 +347,12 @@ public class LudoState extends GameState {
                 }
             }
             //Now that we have moved the token, change the current player's turn!
-            if(diceVal !=6 && this.getNumMovableTokens(playerID) > 1){
-                changePlayerTurn();
-            }
+            changePlayerTurn();
             return true;
         }
         else {
-            return false;
+            //do nothing
+            return true;
         }
     }
 
@@ -464,6 +398,10 @@ public class LudoState extends GameState {
         }
 
         return output;
+    }
+
+    public void setStillPlayersTurn(boolean b){
+        this.stillPlayersTurn = b;
     }
 
 
