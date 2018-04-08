@@ -35,7 +35,9 @@ public class LudoState extends GameState {
     private int numPlayers;
     private int playerID_active;
     private int[] playerScore;
-    public boolean stillPlayersTurn = false;
+    private boolean stillPlayersTurn;
+    private boolean canBringOutOfStart;
+    private boolean canMovePiece;
 
     /**
      * Fixed by Avery Guillermo!
@@ -45,6 +47,9 @@ public class LudoState extends GameState {
      * the value to which the counter's value should be initialized
      */
     public LudoState() {
+        canMovePiece = false;
+        stillPlayersTurn = false;
+        canBringOutOfStart = false;
         playerID_active = 0;
         numPlayers = 4;
         dice = new Random();
@@ -81,6 +86,7 @@ public class LudoState extends GameState {
      * @param original the object from which the copy should be made
      */
     public LudoState(LudoState original) {
+        this.canMovePiece = original.canMovePiece;
         this.numPlayers = original.numPlayers;
         this.playerID_active = original.playerID_active;
         this.dice = original.dice;
@@ -205,23 +211,6 @@ public class LudoState extends GameState {
         return isRollable;
     }
 
-    /**
-     * getter method to search for piece by reference to distance traveled
-     *
-     * @param spacesTraveled
-     * @return
-     */
-
-//    public Token getTokenByTravelDistance(int spacesTraveled) {
-//
-//        //only iterates through players' 4 Tokens
-//        for (int i = playerID_active; i < 16; i += 4) {
-//            if (pieces[i].getOwner() == playerID_active && pieces[i].getNumSpacesMoved() == spacesTraveled) {
-//                return pieces[i];
-//            }
-//        }
-//        return null;
-//    }
 
     /**fixed by Avery Guillermo!
      *
@@ -261,7 +250,17 @@ public class LudoState extends GameState {
         int count = 0;
         for (int i = (playerID*4); i < (playerID*4 + 4); i++) {
             if (pieces[i].getIsHome() == false && pieces[i].getReachedHomeBase() == false){
-                count++;
+                int currentLocation = pieces[i].getNumSpacesMoved();
+                int homeBaseLocation = 56;
+                if(currentLocation>50){ //Inside homestretch
+                    if(diceVal+currentLocation <= homeBaseLocation){
+                        count++;
+                    }
+                    // else don't increment because it can't move
+                }
+                else{
+                    count++;
+                }
             }
         }
         return count;
@@ -347,7 +346,15 @@ public class LudoState extends GameState {
                 }
             }
             //Now that we have moved the token, change the current player's turn!
-            changePlayerTurn();
+            if(diceVal != 6){
+                changePlayerTurn();
+            }
+            else{ // diceVal == 6
+                stillPlayersTurn = true;
+                isRollable = true;
+            }
+            canBringOutOfStart = false;
+            canMovePiece = false; //now that the player moved the token, the player can't use the diceVal to move anymore!
             return true;
         }
         else {
@@ -404,5 +411,23 @@ public class LudoState extends GameState {
         this.stillPlayersTurn = b;
     }
 
+    public boolean getStillPlayersTurn(){
+        return this.stillPlayersTurn;
+    }
 
+    public void setCanBringOutOfStart(boolean b){
+        this.canBringOutOfStart = b;
+    }
+
+    public boolean isCanBringOutOfStart() {
+        return canBringOutOfStart;
+    }
+
+    public void setCanMovePiece(boolean b){
+        this.canMovePiece = b;
+    }
+
+    public boolean getCanMovePiece(){
+        return this.canMovePiece;
+    }
 }

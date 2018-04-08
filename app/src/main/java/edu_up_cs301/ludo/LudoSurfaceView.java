@@ -328,7 +328,7 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
         clearDice(canvas,box);
         int currentPlayer = state.getWhoseMove();
-        if(state.stillPlayersTurn == true)  {
+        if(state.getStillPlayersTurn() == true)  {
             switch (state.getWhoseMove()) { //don't shift where the dice is drawn
                 case 0:
                     canvas.drawRect((float) (box * 2.3), (float) (box * 2.3), (float) (box * 3.7), (float) (box * 3.7), redPaint);

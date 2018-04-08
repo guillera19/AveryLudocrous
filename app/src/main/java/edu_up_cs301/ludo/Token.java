@@ -112,9 +112,6 @@ public class Token {
         return this.path[this.numSpacesMoved][1];
     }
 
-    public void setNumSpacesMoved(int value){
-        this.numSpacesMoved = value;
-    }
 
     public int getNumSpacesMoved() {
         return numSpacesMoved;

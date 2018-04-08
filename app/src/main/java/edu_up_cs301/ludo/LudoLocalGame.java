@@ -75,7 +75,7 @@ public class LudoLocalGame extends LocalGame {
         int playerID;
         //if its the person's turn and they are trying to make a move
         if (canMove(playerID = getPlayerIdx(action.getPlayer()))) {
-            if (action instanceof ActionMoveToken && state.getNumMovableTokens(playerID) > 1) {
+            if (action instanceof ActionMoveToken && state.getCanMovePiece() == true) {
                 //move forward, consider and react to landing on another piece
                 return state.advanceToken(playerID, ((ActionMoveToken) action).getIndex());
 
@@ -91,6 +91,9 @@ public class LudoLocalGame extends LocalGame {
                     state.changePlayerTurn();
                     return true;
                 }
+
+                state.setCanMovePiece(true);
+
                 //if the player did not roll a six but can move a single piece
                 if(state.getDiceVal() !=6 && state.getNumMovableTokens(playerID) == 1){
                     state.setIsRollable(false);
@@ -108,16 +111,19 @@ public class LudoLocalGame extends LocalGame {
                 //if the player rolls a six, let them take a piece out of base or move a piece
                 if(state.getDiceVal() ==6 && state.getTokenIndexOfFirstPieceInStart(playerID) >=0){
                     state.setStillPlayersTurn(true);
+                    state.setCanBringOutOfStart(true);
                     return true;
                 }
 
 
             }
             //TODO: There is a bug: when a player rolls a six, they can move all their pieces out of start
-            else if (action instanceof ActionRemoveFromBase && state.getDiceVal() == 6) {
+            else if (action instanceof ActionRemoveFromBase && state.getDiceVal() == 6 && state.isCanBringOutOfStart() == true) {
                 //toggle boolean to false
                 state.pieces[((ActionRemoveFromBase) action).getIndex()].setIsHome(false);
                 state.setStillPlayersTurn(true);
+                state.setCanBringOutOfStart(false);
+                state.setCanMovePiece(false);
                 return true;
 
             }

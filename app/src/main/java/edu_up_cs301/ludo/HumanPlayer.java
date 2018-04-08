@@ -42,8 +42,6 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
     private GameMainActivity myActivity;
 
 
-
-
     /**
      * constructor
      *
@@ -83,8 +81,7 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
     /**
      * Callback method, called when player gets a message
      *
-     * @param info
-     * 		the message
+     * @param info the message
      */
     @Override
     public void receiveInfo(GameInfo info) {
@@ -95,13 +92,12 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // if the move was out of turn or otherwise illegal, flash the screen
             surfaceView.flash(Color.RED, 50);
-        }
-        else if (!(info instanceof LudoState))
+        } else if (!(info instanceof LudoState))
             // if we do not have a LudoState, ignore
             return;
         else {
-            surfaceView.setState((LudoState)info);
-            state = (LudoState)info;
+            surfaceView.setState((LudoState) info);
+            state = (LudoState) info;
             surfaceView.invalidate();
             Log.i("human player", "receiving");
         }
@@ -114,45 +110,48 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         //make sure that the thing that was touched was the surface view
-        if(v.getId() == surfaceView.getId()){
-            float xTouch = event.getX();
-            float yTouch = event.getY();
-            float width = surfaceView.getWidth();
-            float box = width / 15;
+        if (v.getId() == surfaceView.getId()) {
+            if (state.getWhoseMove() == this.playerNum) {
+                float xTouch = event.getX();
+                float yTouch = event.getY();
+                float width = surfaceView.getWidth();
+                float box = width / 15;
 
-            //create instance of gameAction
-            GameAction action = null;
-            int index;
-            index = getIndexOfPieceTouched(xTouch, yTouch, box);
+                //create instance of gameAction
+                GameAction action = null;
+                int index;
+                index = getIndexOfPieceTouched(xTouch, yTouch, box);
 
-            if(index == -1){
-                Log.i("OnTouch", "No piece was pressed");
-            }
-            else{
-                Log.i("OnTouch", "The piece that was touched was: " + index);
-                if(checkIfAHomeBaseWasTouched(xTouch, yTouch,box)==false){ //the user is trying to move a piece forward
-                    action = new ActionMoveToken(this, index);
-                    game.sendAction(action);
+                if (index == -1) {
+                    Log.i("OnTouch", "No piece was pressed");
                 }
-                else{ // the user is trying to move a piece out of start base
-                    action = new ActionRemoveFromBase(this, index);
-                    game.sendAction(action);
+                else {
+                    Log.i("OnTouch", "The piece that was touched was: " + index);
+                    if (checkIfAHomeBaseWasTouched(xTouch, yTouch, box) == false) { //the user is trying to move a piece forward
+                        action = new ActionMoveToken(this, index);
+                        game.sendAction(action);
+                    }
+                    else { // the user is trying to move a piece out of start base
+                        action = new ActionRemoveFromBase(this, index);
+                        game.sendAction(action);
+                    }
                 }
             }
         }
-
-        return false;
+        return true;
     }
+
 
     //TODO: OPTIMIZE when we assign the paths to the player
     //TODO: This was just to see that when all the pieces were touched, we get the index back
-    public int getIndexOfPieceTouched(float xTouch, float yTouch, float box){
+    public int getIndexOfPieceTouched(float xTouch, float yTouch, float box) {
         boolean aHomeBaseWasTouched = checkIfAHomeBaseWasTouched(xTouch, yTouch, box);
 
+        int playerID = this.playerNum;
         float xPos, yPos;
-        for(int i =0; i<16; i++) { //traverse through all the pieces
+        for (int i = (playerID * 4); i < (playerID * 4 + 4); i++) {//traverse through the pieces the player owns
             if (aHomeBaseWasTouched == false) {//check the board tiles
-                if (state.pieces[i].getOwner() == 0) {//use the red path
+                if(state.pieces[i].getIsHome() == false) {
                     xPos = (state.pieces[i].getCurrentXLoc() * box);
                     yPos = (state.pieces[i].getCurrentYLoc() * box);
                     if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
@@ -161,70 +160,12 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
                         }
                     }
                 }
-                if (state.pieces[i].getOwner() == 1) {//use the green path
-                    xPos = (state.pieces[i].getCurrentXLoc() * box);
-                    yPos = (state.pieces[i].getCurrentYLoc() * box);
-                    if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
-                        if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
-                            return i;
-                        }
-                    }
-
-                }
-                if (state.pieces[i].getOwner() == 2) {//use the yellow path
-                    xPos = (state.pieces[i].getCurrentXLoc() * box);
-                    yPos = (state.pieces[i].getCurrentYLoc() * box);
-                    if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
-                        if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
-                            return i;
-                        }
-                    }
-                }
-                if (state.pieces[i].getOwner() == 3) {//use the blue path
-                    xPos = (state.pieces[i].getCurrentXLoc() * box);
-                    yPos = (state.pieces[i].getCurrentYLoc() * box);
-                    if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
-                        if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
-                            return i;
-                        }
-                    }
-                }
-            }
-            else {//check the pieces in the start tiles
-                float x, y;
+            } else {//check the pieces in the start tiles
                 if (state.pieces[i].getOwner() == 0) {//red piece
-                    x = (float) state.pieces[i].getStartXPos() * box;
-                    y = (float) state.pieces[i].getStartYPos() * box;
-                    if ((xTouch >= x) && (xTouch <= (x + box))) {
-                        if ((yTouch >= y) && (yTouch <= (y + box))) {
-                            return i;
-                        }
-                    }
-                }
-                if (state.pieces[i].getOwner() == 1) {//green piece
-                    x = (float) state.pieces[i].getStartXPos() * box;
-                    y = (float) state.pieces[i].getStartYPos() * box;
-                    if ((xTouch >= x) && (xTouch <= (x + box))) {
-                        if ((yTouch >= y) && (yTouch <= (y + box))) {
-                            return i;
-                        }
-                    }
-
-                }
-                if (state.pieces[i].getOwner() == 2) {//blue piece
-                    x = (float) state.pieces[i].getStartXPos() * box;
-                    y = (float) state.pieces[i].getStartYPos() * box;
-                    if ((xTouch >= x) && (xTouch <= (x + box))) {
-                        if ((yTouch >= y) && (yTouch <= (y + box))) {
-                            return i;
-                        }
-                    }
-                }
-                if (state.pieces[i].getOwner() == 3) {//yellow piece
-                    x = (float) state.pieces[i].getStartXPos() * box;
-                    y = (float) state.pieces[i].getStartYPos() * box;
-                    if ((xTouch >= x) && (xTouch <= (x + box))) {
-                        if ((yTouch >= y) && (yTouch <= (y + box))) {
+                    xPos = (float) state.pieces[i].getStartXPos() * box;
+                    yPos = (float) state.pieces[i].getStartYPos() * box;
+                    if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
+                        if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
                             return i;
                         }
                     }
@@ -233,6 +174,7 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         }
         return -1;//return negative 1 if no pieces were pressed!
     }
+
 
     public boolean checkIfAHomeBaseWasTouched(float xTouch, float yTouch, float box){
 
@@ -262,9 +204,18 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         GameAction action = null;
 
         if(v.getId() == rollDiceButton.getId()) {
-            action = new ActionRollDice(this);
-            Log.i("Onclick", "Human Player Rolling Dice");
-            game.sendAction(action);
+            if (state.getWhoseMove() == this.playerNum) {
+                action = new ActionRollDice(this);
+                Log.i("Onclick", "Human Player Rolling Dice");
+                game.sendAction(action);
+            }
+            else{
+                //do nothing since its not your turn
+            }
+        }
+        else{
+            //do nothing
+            return;
         }
     }
 
