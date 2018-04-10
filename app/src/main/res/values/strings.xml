@@ -11,7 +11,9 @@
     <string name="remove_player">Remove Player</string>
     <string name="add_player">Add Player</string>
     <string name="player_name">Player Name</string>
+    <string name="player_color">Color</string>
     <string name="player_type">Player Type</string>
+    <string name="delete_Player">Delete</string>
     <string name="guest">Guest</string>
     <string name="save_config_as_default">Save this Configuration as the Default</string>
     <string name="start_the_game">Start Game!</string>

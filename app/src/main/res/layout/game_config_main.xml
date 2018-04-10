@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/image1"
     android:orientation="horizontal" >
 
     <include
@@ -10,11 +11,13 @@
         android:layout_height="wrap_content"
         layout="@layout/game_config_tabhost" />
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/table_row_vert_pad" >
+        android:layout_marginBottom="@dimen/table_row_vert_pad"
+        android:id="@+id/relativeLayout">
 
         <Button
             android:id="@+id/saveConfigButton"

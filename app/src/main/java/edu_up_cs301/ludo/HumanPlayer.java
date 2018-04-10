@@ -15,7 +15,7 @@ import edu_up_cs301.game.infoMsg.IllegalMoveInfo;
 import edu_up_cs301.game.infoMsg.NotYourTurnInfo;
 
 /**
- *HumanPlayer
+ * HumanPlayer
  * The human determines, through this class, which actions to send
  * specifically: which piece they want moved and if they roll a dice.
  */
@@ -32,6 +32,7 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
 
     /**
      * constructor
+     *
      * @param name of player
      */
     public HumanPlayer(String name) {
@@ -40,9 +41,10 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
 
     /**
      * setAsGui
+     *
      * @param activity GameMainActivity object
-     *  Sets this player as the one attached to the GUI. Saves the
-     *  activity, links listeners to IO to invoke specific methods.
+     *                 Sets this player as the one attached to the GUI. Saves the
+     *                 activity, links listeners to IO to invoke specific methods.
      */
     @Override
     public void setAsGui(GameMainActivity activity) {
@@ -59,12 +61,14 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
 
     /**
      * getTopview
+     *
      * @return the gui that is displayed currenty.
      */
     @Override
     public View getTopView() {
         return myActivity.findViewById(R.id.top_gui_layout);
     }
+
     /**
      * Callback method, called when player gets a message
      *
@@ -89,7 +93,8 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
 
     /**
      * onTouch
-     * @param v View object
+     *
+     * @param v     View object
      * @param event Event Object
      * @return Always returns true
      */
@@ -108,15 +113,13 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
                 index = getIndexOfPieceTouched(xTouch, yTouch, box);
                 if (index == -1) {
                     Log.i("OnTouch", "No piece was pressed");
-                }
-                else {
+                } else {
                     //Checks to see if the the user touched inside the homebase
                     Log.i("OnTouch", "The piece that was touched was: " + index);
                     if (checkIfAHomeBaseWasTouched(xTouch, yTouch, box) == false) { //the user is trying to move a piece forward
                         action = new ActionMoveToken(this, index);
                         game.sendAction(action);
-                    }
-                    else { // the user is trying to move a piece out of start base
+                    } else { // the user is trying to move a piece out of start base
                         action = new ActionRemoveFromBase(this, index);
                         game.sendAction(action);
                     }
@@ -129,6 +132,7 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
     /**
      * getIndexOfPieceTouched
      * Each peice has an index, this method gets that index
+     *
      * @param xTouch
      * @param yTouch
      * @param box
@@ -140,7 +144,7 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         float xPos, yPos;
         for (int i = (playerID * 4); i < (playerID * 4 + 4); i++) {//traverse through the pieces the player owns
             if (aHomeBaseWasTouched == false) {//check the board tiles
-                if(state.pieces[i].getIsHome() == false) {
+                if (state.pieces[i].getIsHome() == false) {
                     xPos = (state.pieces[i].getCurrentXLoc() * box);
                     yPos = (state.pieces[i].getCurrentYLoc() * box);
                     if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
@@ -150,13 +154,11 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
                     }
                 }
             } else {//check the pieces in the start tiles
-                if (state.pieces[i].getOwner() == 0) {//red piece
-                    xPos = (float) state.pieces[i].getStartXPos() * box;
-                    yPos = (float) state.pieces[i].getStartYPos() * box;
-                    if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
-                        if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
-                            return i;
-                        }
+                xPos = (float) state.pieces[i].getStartXPos() * box;
+                yPos = (float) state.pieces[i].getStartYPos() * box;
+                if ((xTouch >= xPos) && (xTouch <= (xPos + box))) {
+                    if ((yTouch >= yPos) && (yTouch <= (yPos + box))) {
+                        return i;
                     }
                 }
             }
@@ -165,51 +167,47 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
     }
 
     /**
-     *checkIfAHomeBaseWasTouched
+     * checkIfAHomeBaseWasTouched
+     *
      * @param xTouch
      * @param yTouch
      * @param box
      * @return
      */
-    public boolean checkIfAHomeBaseWasTouched(float xTouch, float yTouch, float box){
+    public boolean checkIfAHomeBaseWasTouched(float xTouch, float yTouch, float box) {
 
         //first check if the coordinates touched were in start base or actually on the board coordinates
-        if((xTouch> (box*0)) && (xTouch< (box*6)) && (yTouch> (box*0)) && (yTouch< (box*6))){
+        if ((xTouch > (box * 0)) && (xTouch < (box * 6)) && (yTouch > (box * 0)) && (yTouch < (box * 6))) {
             return true;
-        }
-        else if ((xTouch> (box*9)) && (xTouch< (box*15)) && (yTouch> (box*0)) && (yTouch< (box*6))){
+        } else if ((xTouch > (box * 9)) && (xTouch < (box * 15)) && (yTouch > (box * 0)) && (yTouch < (box * 6))) {
             return true;
-        }
-        else if ((xTouch> (box*0)) && (xTouch< (box*6)) && (yTouch> (box*9)) && (yTouch< (box*15))){
+        } else if ((xTouch > (box * 0)) && (xTouch < (box * 6)) && (yTouch > (box * 9)) && (yTouch < (box * 15))) {
             return true;
-        }
-        else if ((xTouch> (box*9)) && (xTouch< (box*15)) && (yTouch> (box*9)) && (yTouch< (box*15))){
+        } else if ((xTouch > (box * 9)) && (xTouch < (box * 15)) && (yTouch > (box * 9)) && (yTouch < (box * 15))) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
     /**
      * onClick
+     *
      * @param v a view object
      */
     @Override
     public void onClick(View v) {
         //create instance of gameAction associated with button pressed
         GameAction action = null;
-        if(v.getId() == rollDiceButton.getId()) {
+        if (v.getId() == rollDiceButton.getId()) {
             if (state.getWhoseMove() == this.playerNum) {
                 action = new ActionRollDice(this);
                 Log.i("Onclick", "Human Player Rolling Dice");
                 game.sendAction(action);
-            }
-            else{
+            } else {
                 //do nothing since its not your turn
             }
-        }
-        else{
+        } else {
             //do nothing
             return;
         }

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -74,6 +75,7 @@ public abstract class GameMainActivity extends Activity implements
 	private boolean doingConfiguration = true;
 
 	private Button rulesButton;
+	private int numPlayers = 0;
 
 	/**
 	 * contains the game configuration this activity will be used to initialize
@@ -232,11 +234,7 @@ public abstract class GameMainActivity extends Activity implements
 		// run the thread
 		Thread t = new Thread(runner);
 		t.start();
-//		try {
-//			// join the thread to that we don't get ahead of it
-//			t.join();
-//		} catch (InterruptedException e) {
-//		}
+
 
 	}//hideSoftKeyboard
 
@@ -522,6 +520,10 @@ public abstract class GameMainActivity extends Activity implements
 					if (v == button) {
 						// found it! remove from the layout and the list
 						removePlayer(row);
+						if(numPlayers >1){
+							numPlayers--;
+						}
+
 					}
 				}
 				break;
@@ -628,6 +630,29 @@ public abstract class GameMainActivity extends Activity implements
 		ImageButton delButton = (ImageButton) row
 				.findViewById(R.id.delPlayerButton);
 		delButton.setOnClickListener(this);
+
+
+		//implemented by Avery!
+		ImageButton colorButton = (ImageButton) row
+				.findViewById(R.id.colorPlayerButton);
+		colorButton.setOnClickListener(this);
+
+		switch(numPlayers){
+			case 0:
+				colorButton.setBackgroundColor(Color.rgb(193, 23, 23));
+				break;
+			case 1:
+				colorButton.setBackgroundColor(Color.rgb(50, 220, 50));
+				break;
+			case 2:
+				colorButton.setBackgroundColor(Color.rgb(242, 228, 38));
+				break;
+			case 3:
+				colorButton.setBackgroundColor(Color.rgb(10, 10, 230));
+				break;
+		}
+		numPlayers++;
+
 
 		// add the row to the right lists and layout
 		this.tableRows.add(row);

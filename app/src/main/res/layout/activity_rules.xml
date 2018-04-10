@@ -81,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:text="A player wins the game by moving all of thier pieces into the center home Tile"
+            android:text="A player wins the game by moving all of thier pieces into the center home tile."
             android:textColor="#FFF"
             android:textSize="18sp" />
     </LinearLayout>

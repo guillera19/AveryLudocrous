@@ -53,22 +53,22 @@ public class LudoState extends GameState {
         diceVal = 1;
         isRollable = true;
         pieces = new Token[]{
-                new Token(0, 3, 1.5), //red piece1
-                new Token(0, 4.5, 3), //red piece2
-                new Token(0, 3, 4.5), //red piece3
-                new Token(0, 1.5, 3), //red piece4
-                new Token(1, 12, 1.5), //green piece1
-                new Token(1, 13.5, 3), //green piece2
-                new Token(1, 12, 4.5), //green piece3
-                new Token(1, 10.5, 3), //green piece4
-                new Token(2, 12, 10.5), //yellow piece1
-                new Token(2, 13.5, 12), //yellow piece2
-                new Token(2, 12, 13.5), //yellow piece3
-                new Token(2, 10.5, 12), //yellow piece4
-                new Token(3, 3, 10.5), //blue piece1
-                new Token(3, 4.5, 12), //blue piece2
-                new Token(3, 3, 13.5), //blue piece3
-                new Token(3, 1.5, 12)}; //blue piece4
+                new Token(0, 3, 1.4), //red piece1
+                new Token(0, 4.6, 3), //red piece2
+                new Token(0, 3, 4.6), //red piece3
+                new Token(0, 1.4, 3), //red piece4
+                new Token(1, 12, 1.4), //green piece1
+                new Token(1, 13.6, 3), //green piece2
+                new Token(1, 12, 4.6), //green piece3
+                new Token(1, 10.4, 3), //green piece4
+                new Token(2, 12, 10.4), //yellow piece1
+                new Token(2, 13.6, 12), //yellow piece2
+                new Token(2, 12, 13.6), //yellow piece3
+                new Token(2, 10.4, 12), //yellow piece4
+                new Token(3, 3, 10.4), //blue piece1
+                new Token(3, 4.6, 12), //blue piece2
+                new Token(3, 3, 13.6), //blue piece3
+                new Token(3, 1.4, 12)}; //blue piece4
 
         //scores are 0;
         playerScore = new int[]{0, 0, 0, 0};

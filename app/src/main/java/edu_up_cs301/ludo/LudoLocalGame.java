@@ -109,7 +109,7 @@ public class LudoLocalGame extends LocalGame {
                 //if the player rolls a six, let them take a piece out of base or move a piece
                 if(state.getDiceVal() ==6){
                     state.setStillPlayersTurn(true);
-                    state.setIsRollable(true);
+                    state.setIsRollable(false);
                     state.setCanBringOutOfStart(true);
                     return true;
                 }
@@ -117,6 +117,7 @@ public class LudoLocalGame extends LocalGame {
             else if (action instanceof ActionRemoveFromBase && state.getDiceVal() == 6 && state.isCanBringOutOfStart() == true) {
                 //toggle boolean to false
                 state.pieces[((ActionRemoveFromBase) action).getIndex()].setIsHome(false);
+                state.setIsRollable(true);
                 state.setStillPlayersTurn(true);
                 state.setCanBringOutOfStart(false);
                 state.setCanMovePiece(false);
