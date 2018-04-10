@@ -101,6 +101,8 @@ public class LudoLocalGame extends LocalGame {
                     state.advanceToken(playerID, index);
                     return true;
                 }
+
+
                 //if the player did not roll a six but can move multiple pieces
                 if(state.getDiceVal() !=6 && state.getNumMovableTokens(playerID) > 1){
                     state.setIsRollable(false);
@@ -109,15 +111,15 @@ public class LudoLocalGame extends LocalGame {
                 }
 
                 //if the player rolls a six, let them take a piece out of base or move a piece
-                if(state.getDiceVal() ==6 && state.getTokenIndexOfFirstPieceInStart(playerID) >=0){
+                if(state.getDiceVal() ==6){
                     state.setStillPlayersTurn(true);
+                    state.setIsRollable(true);
                     state.setCanBringOutOfStart(true);
                     return true;
                 }
 
 
             }
-            //TODO: There is a bug: when a player rolls a six, they can move all their pieces out of start
             else if (action instanceof ActionRemoveFromBase && state.getDiceVal() == 6 && state.isCanBringOutOfStart() == true) {
                 //toggle boolean to false
                 state.pieces[((ActionRemoveFromBase) action).getIndex()].setIsHome(false);

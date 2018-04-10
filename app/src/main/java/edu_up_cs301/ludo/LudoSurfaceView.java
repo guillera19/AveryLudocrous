@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -22,80 +22,22 @@ import edu_up_cs301.game.util.FlashSurfaceView;
 public class LudoSurfaceView extends FlashSurfaceView {
 
     protected LudoState state = new LudoState();
-    private int[][] redPath;
-    private int[][] greenPath;
-    private int[][] bluePath;
-    private int[][] yellowPath;
 
 
     public LudoSurfaceView(Context context) {
         super(context);
-        generalInit();
+        setWillNotDraw(false);
     }
 
     public LudoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        generalInit();
+        setWillNotDraw(false);
     }
 
     public void setState(LudoState state) {
         this.state = state;
     }
 
-
-    /**
-     * \
-     * generalInit
-     * <p>
-     * Initialization stuff used by all ctors
-     */
-    private void generalInit() {
-        setWillNotDraw(false);
-
-        redPath = new int[][]{{1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {8, 0},
-                {8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {14, 8}, {13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {6, 14}, {6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7}};
-
-        greenPath = new int[][]{{8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {14, 8}, {13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {6, 14}, {6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {0, 6}, {1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {7, 1}, {7, 2},
-                {7, 3}, {7, 4}, {7, 5}, {7, 6}};
-
-        bluePath = new int[][]{{6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {0, 6}, {1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {8, 0},
-                {8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {14, 8}, {13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {7, 13}, {7, 12}, {7, 11}, {7, 10}, {7, 9}, {7, 8}};
-
-        yellowPath = new int[][]{{13, 8}, {12, 8}, {11, 8}, {10, 8},
-                {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
-                {8, 14}, {7, 14}, {6, 14}, {6, 13}, {6, 12}, {6, 11},
-                {6, 10}, {6, 9}, {5, 8}, {4, 8}, {3, 8}, {2, 8},
-                {1, 8}, {0, 8}, {0, 7}, {0, 6}, {1, 6}, {2, 6},
-                {3, 6}, {4, 6}, {5, 6}, {6, 5}, {6, 4}, {6, 3},
-                {6, 2}, {6, 1}, {6, 0}, {7, 0}, {8, 0},
-                {8, 1}, {8, 2}, {8, 3}, {8, 4}, {8, 5},
-                {9, 6}, {10, 6}, {11, 6}, {12, 6}, {13, 6}, {14, 6},
-                {14, 7}, {13, 7}, {12, 7}, {11, 7}, {10, 7}, {9, 7}, {8, 7}};
-    }
 
 
     /**
@@ -108,7 +50,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
         //define the canvas instance variables
         float heightAndWidth = canvas.getWidth();//height and width are the same because the surface view is a square
         float box = heightAndWidth / 15;
-        int boxInt = canvas.getWidth() / 15;
 
         //Draw a green filled square
         //Creating Color Objects
@@ -163,10 +104,10 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
         //Red Large Tile Section Creation
         canvas.drawRect(0, 0, (box * 6), (box * 6), redPaint);
-        Point d11 = new Point(boxInt * 3, 0);
-        Point d12 = new Point(boxInt * 6, boxInt * 3);
-        Point d13 = new Point((boxInt * 3), (boxInt * 6));
-        Point d14 = new Point((boxInt * 0), (boxInt * 3)); //Bottom Left
+        PointF d11 = new PointF(box * 3, 0);
+        PointF d12 = new PointF(box * 6, box * 3);
+        PointF d13 = new PointF((box * 3), (box * 6));
+        PointF d14 = new PointF((box * 0), (box * 3)); //Bottom Left
         //Drawing the red diamond
         Path redDiamond = new Path();
         redDiamond.moveTo(d11.x, d11.y);
@@ -179,10 +120,10 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
         //Green Large Tile Section Creation
         canvas.drawRect((box * 9), 0.0f, (box * 15), (box * 6), greenPaint);
-        Point d21 = new Point(boxInt * 12, 0);
-        Point d22 = new Point(boxInt * 15, boxInt * 3);
-        Point d23 = new Point((boxInt * 12), (boxInt * 6));
-        Point d24 = new Point((boxInt * 9), (boxInt * 3)); //Bottom Left
+        PointF d21 = new PointF(box * 12, 0);
+        PointF d22 = new PointF(box * 15, box * 3);
+        PointF d23 = new PointF((box * 12), (box * 6));
+        PointF d24 = new PointF((box * 9), (box * 3)); //Bottom Left
         //Drawing the green diamond
         Path greenDiamond = new Path();
         greenDiamond.moveTo(d21.x, d21.y);
@@ -191,14 +132,14 @@ public class LudoSurfaceView extends FlashSurfaceView {
         greenDiamond.lineTo(d24.x, d24.y);
         greenDiamond.close();
         canvas.drawPath(greenDiamond, whitePaint);
-        drawStartTiles(box, canvas, greenPaint, boxInt * 9, 0);
+        drawStartTiles(box, canvas, greenPaint, box * 9, 0);
 
         //Blue Large Tile Section Creation
         canvas.drawRect((box * 0), box * 9, (box * 6), (box * 15), bluePaint);
-        Point d31 = new Point(boxInt * 3, boxInt * 9);
-        Point d32 = new Point(boxInt * 6, boxInt * 12);
-        Point d33 = new Point((boxInt * 3), (boxInt * 15));
-        Point d34 = new Point((boxInt * 0), (boxInt * 12)); //Bottom Left
+        PointF d31 = new PointF(box * 3, box * 9);
+        PointF d32 = new PointF(box * 6, box * 12);
+        PointF d33 = new PointF((box * 3), (box * 15));
+        PointF d34 = new PointF((box * 0), (box * 12)); //Bottom Left
         //Drawing the blue diamond
         Path blueDiamond = new Path();
         blueDiamond.moveTo(d31.x, d31.y);
@@ -207,14 +148,14 @@ public class LudoSurfaceView extends FlashSurfaceView {
         blueDiamond.lineTo(d34.x, d34.y);
         blueDiamond.close();
         canvas.drawPath(blueDiamond, whitePaint);
-        drawStartTiles(box, canvas, bluePaint, 0, boxInt * 9);
+        drawStartTiles(box, canvas, bluePaint, 0, box * 9);
 
         //Yellow Large Tile Section Creation
         canvas.drawRect((box * 9), (box * 9), (box * 15), (box * 15), yellowPaint);
-        Point d41 = new Point(boxInt * 12, boxInt * 9);
-        Point d42 = new Point(boxInt * 15, boxInt * 12);
-        Point d43 = new Point((boxInt * 12), (boxInt * 15));
-        Point d44 = new Point((boxInt * 9), (boxInt * 12)); //Bottom Left
+        PointF d41 = new PointF(box * 12, box * 9);
+        PointF d42 = new PointF(box * 15, box * 12);
+        PointF d43 = new PointF((box * 12), (box * 15));
+        PointF d44 = new PointF((box * 9), (box * 12)); //Bottom Left
         //Drawing the yellow diamond
         Path yellowDiamond = new Path();
         yellowDiamond.moveTo(d41.x, d41.y);
@@ -223,15 +164,15 @@ public class LudoSurfaceView extends FlashSurfaceView {
         yellowDiamond.lineTo(d44.x, d44.y);
         yellowDiamond.close();
         canvas.drawPath(yellowDiamond, whitePaint);
-        drawStartTiles(box, canvas, yellowPaint, boxInt * 9, boxInt * 9);
+        drawStartTiles(box, canvas, yellowPaint, box * 9, box * 9);
 
         //Drawing Center Square
         canvas.drawRect((box * 6), (box * 6), (box * 9), (box * 9), whitePaint);
-        Point p1 = new Point((boxInt * 6), (boxInt * 6)); //Top Left
-        Point p2 = new Point((canvas.getWidth() / 2), (canvas.getWidth() / 2)); //Dead Center
-        Point p3 = new Point((boxInt * 9), (boxInt * 6)); //Top Right
-        Point p4 = new Point((boxInt * 6), (boxInt * 9)); //Bottom Left
-        Point p5 = new Point((boxInt * 9), (boxInt * 9)); //Bottom Right
+        PointF p1 = new PointF((box * 6), (box * 6)); //Top Left
+        PointF p2 = new PointF((canvas.getWidth() / 2), (canvas.getWidth() / 2)); //Dead Center
+        PointF p3 = new PointF((box * 9), (box * 6)); //Top Right
+        PointF p4 = new PointF((box * 6), (box * 9)); //Bottom Left
+        PointF p5 = new PointF((box * 9), (box * 9)); //Bottom Right
         //Drawing the green Center Triangle
         Path tri1 = new Path();
         tri1.moveTo(p1.x, p1.y);
@@ -265,10 +206,10 @@ public class LudoSurfaceView extends FlashSurfaceView {
         canvas.drawPath(tri4, yellowPaint);
 
         //draw the safe space tiles
-        drawStar((boxInt * 2), (boxInt * 8), canvas, box);
-        drawStar((boxInt * 8), (boxInt * 12), canvas, box);
-        drawStar((boxInt * 6), (boxInt * 2), canvas, box);
-        drawStar((boxInt * 12), (boxInt * 6), canvas, box);
+        drawStar((box * 2), (box * 8), canvas, box);
+        drawStar((box * 8), (box * 12), canvas, box);
+        drawStar((box * 6), (box * 2), canvas, box);
+        drawStar((box * 12), (box * 6), canvas, box);
 
         //draw all the pieces
         drawPieces(canvas, box);
@@ -278,25 +219,25 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
 
 
-    public void drawStar(int xPos,  int yPos, Canvas canvas, float box){
+    public void drawStar(float xPos,  float yPos, Canvas canvas, float box){
         Paint whitePaint = new Paint();
         whitePaint.setColor(Color.rgb(255,255,255));
 
-        int xShift1 = (int) (0.1122449*box);
-        int xShift2 = (int) (0.5*box);
-        int xShift3 = (int) (0.88877551*box);
-        int yShift1 = (int) (0.295918*box);
-        int yShift2 = (int) (0.8877551*box);
-        int yShift3 = (int) (0.673469*box);
-        int yShift4 = (int) (0.08163*box);
+        float xShift1 = (float) (0.1122449*box);
+        float xShift2 = (float) (0.5*box);
+        float xShift3 = (float) (0.88877551*box);
+        float yShift1 = (float) (0.295918*box);
+        float yShift2 = (float) (0.8877551*box);
+        float yShift3 = (float) (0.673469*box);
+        float yShift4 = (float) (0.08163*box);
 
-        Point p1 = new Point(xPos+xShift1,yPos+yShift1); //Bottom Left of Lower Star
-        Point p2 = new Point(xPos+xShift3,yPos+yShift1); //Bottom Right of Lower Star
-        Point p3 = new Point(xPos+xShift2,yPos+yShift2); //Top of Star
+        PointF p1 = new PointF(xPos+xShift1,yPos+yShift1); //Bottom Left of Lower Star
+        PointF p2 = new PointF(xPos+xShift3,yPos+yShift1); //Bottom Right of Lower Star
+        PointF p3 = new PointF(xPos+xShift2,yPos+yShift2); //Top of Star
 
-        Point p4 = new Point(xPos+xShift1,yPos+yShift3); //Left point of Upper Star
-        Point p5 = new Point(xPos+xShift3,yPos+yShift3); //Right point of Upper Star
-        Point p6 = new Point(xPos+xShift2,yPos+yShift4); //Bottom of Star
+        PointF p4 = new PointF(xPos+xShift1,yPos+yShift3); //Left point of Upper Star
+        PointF p5 = new PointF(xPos+xShift3,yPos+yShift3); //Right point of Upper Star
+        PointF p6 = new PointF(xPos+xShift2,yPos+yShift4); //Bottom of Star
 
 
         Path bottomStar = new Path();
@@ -326,8 +267,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
         Paint yellowPaint = new Paint();       yellowPaint.setColor(Color.rgb(255,255,0));
         Paint blackPaint = new Paint();        blackPaint.setColor(Color.rgb(0,0,0));
 
-        clearDice(canvas,box);
-        int currentPlayer = state.getWhoseMove();
         if(state.getStillPlayersTurn() == true)  {
             switch (state.getWhoseMove()) { //don't shift where the dice is drawn
                 case 0:
@@ -413,20 +352,9 @@ public class LudoSurfaceView extends FlashSurfaceView {
         }
     }
 
-    public void clearDice(Canvas canvas, float box){
-        Paint whitePaint = new Paint();
-        whitePaint.setColor(Color.rgb(255,255,255));
-        canvas.drawRect((float)(box*2.3) , (float)(box*2.3), (float)(box*3.7), (float)(box*3.7), whitePaint);
-        canvas.drawRect(((float)(883.19995 + (box*2.3))), (float)(box*2.3), ((float)(883.19995 + (box*3.7))), (float)(box*3.7), whitePaint);
-        canvas.drawRect(((float)((box*2.3))), ((float)(883.19995+(box*2.3))), ((float)(box*3.7)),((float)(883.19995+(box*3.7))), whitePaint);
-        canvas.drawRect(((float)(883.19995 + (box*2.3))),((float)(883.19995+(box*2.3))),((float)(883.19995 + (box*3.7))),((float)(883.19995+(box*3.7))),whitePaint);
 
 
-    }
-
-
-
-    public void drawStartTiles(float box,Canvas canvas,Paint paint,int xShfit, int yShift){
+    public void drawStartTiles(float box,Canvas canvas,Paint paint,float xShfit, float yShift){
 
         int box1X1=(int)(box*2.3),box1Y1=(int)(box*0.7), box1X2=(int)(box*3.7), box1Y2=(int)(box*2.1);
         int box2X1=(int)(box*3.9),box2Y1=(int)(box*2.3), box2X2=(int)(box*5.3), box2Y2=(int)(box*3.7);
@@ -457,28 +385,28 @@ public class LudoSurfaceView extends FlashSurfaceView {
         for(int i =0; i<16; i++){
             if(state.pieces[i].getIsHome()==false){//draw the pieces out of base
                 if(state.pieces[i].getOwner() ==0){//use the red path
-                    xPos = redPath[state.pieces[i].getNumSpacesMoved()][0];
-                    yPos = redPath[state.pieces[i].getNumSpacesMoved()][1];
+                    xPos = state.pieces[i].getCurrentXLoc();
+                    yPos = state.pieces[i].getCurrentYLoc();
                     canvas.drawCircle((box*xPos) + box/2,(box*yPos) + box/2,30,whitePaint);
                     canvas.drawCircle((box*xPos) + box/2,(box*yPos) + box/2,25,redPaint);
                 }
                 if(state.pieces[i].getOwner() ==1){//use the green path
-                    xPos = greenPath[state.pieces[i].getNumSpacesMoved()][0];
-                    yPos = greenPath[state.pieces[i].getNumSpacesMoved()][1];
+                    xPos = state.pieces[i].getCurrentXLoc();
+                    yPos = state.pieces[i].getCurrentYLoc();
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,30,whitePaint);
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,25,greenPaint);
 
                 }
                 if(state.pieces[i].getOwner() ==2){//use the yellow path
-                    xPos = yellowPath[state.pieces[i].getNumSpacesMoved()][0];
-                    yPos = yellowPath[state.pieces[i].getNumSpacesMoved()][1];
+                    xPos = state.pieces[i].getCurrentXLoc();
+                    yPos = state.pieces[i].getCurrentYLoc();
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,30,whitePaint);
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,25,yellowPaint);
 
                 }
                 if(state.pieces[i].getOwner() ==3){//use the blue path
-                    xPos = bluePath[state.pieces[i].getNumSpacesMoved()][0];
-                    yPos = bluePath[state.pieces[i].getNumSpacesMoved()][1];
+                    xPos = state.pieces[i].getCurrentXLoc();
+                    yPos = state.pieces[i].getCurrentYLoc();
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,30,whitePaint);
                     canvas.drawCircle((box*xPos)+ box/2,(box*yPos)+ box/2,25,bluePaint);
                 }

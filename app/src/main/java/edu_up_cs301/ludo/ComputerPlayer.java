@@ -40,8 +40,8 @@ public class ComputerPlayer extends GameComputerPlayer {
         // if it's not our move, ignore it
         if (myState.getWhoseMove() != this.playerNum) return;
 
-        // sleep for 0.5 seconds to slow down the game
-        sleep(500);
+        // sleep for 0.7 seconds to slow down the game
+        sleep(700);
 
         //if it is the computer's turn to roll
         if(myState.getWhoseMove() == this.playerNum){
@@ -51,16 +51,8 @@ public class ComputerPlayer extends GameComputerPlayer {
                 game.sendAction(new ActionRollDice(this));
             }
 
-            //sleep(1000);
-
             int index;
 
-            //TODO: BUG: when the computer player rolls a six and they have at least 1 available piece to move
-//            index = myState.getTokenIndexOfFirstPieceInStart(this.playerNum);
-//            if(myState.getDiceVal() ==6 && myState.getNumMovableTokens(myState.getWhoseMove()) ==1){
-//                game.sendAction(new ActionMoveToken(this, index));
-//                return;
-//            }
 
             index = myState.getTokenIndexOfFirstPieceOutOfStart(this.playerNum);
             //if the computer needs to move a piece

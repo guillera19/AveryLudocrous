@@ -100,7 +100,6 @@ public class Token {
         this.startXPos = original.startXPos;
         this.startYPos = original.startYPos;
         this.reachedHomeBase = original.reachedHomeBase;
-        //TODO:This could be wrong
         this.path = original.path;
     }
 

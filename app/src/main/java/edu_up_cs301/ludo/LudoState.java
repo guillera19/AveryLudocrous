@@ -38,6 +38,8 @@ public class LudoState extends GameState {
     private boolean stillPlayersTurn;
     private boolean canBringOutOfStart;
     private boolean canMovePiece;
+    private boolean killedAPiece;
+    private boolean scoredAPoint;
 
     /**
      * Fixed by Avery Guillermo!
@@ -47,6 +49,8 @@ public class LudoState extends GameState {
      * the value to which the counter's value should be initialized
      */
     public LudoState() {
+        scoredAPoint = false;
+        killedAPiece = false;
         canMovePiece = false;
         stillPlayersTurn = false;
         canBringOutOfStart = false;
@@ -86,6 +90,8 @@ public class LudoState extends GameState {
      * @param original the object from which the copy should be made
      */
     public LudoState(LudoState original) {
+        this.scoredAPoint = original.scoredAPoint;
+        this.killedAPiece = original.killedAPiece;
         this.canMovePiece = original.canMovePiece;
         this.numPlayers = original.numPlayers;
         this.playerID_active = original.playerID_active;
@@ -158,6 +164,8 @@ public class LudoState extends GameState {
     }
 
     /**
+     * Fixed by Avery Guillermo: Didn't handle the case of in homestretch and diceVal + numSpacesMoved != HomeBase
+     *
      * Called after a dice roll. We go through the active player's pieces and checks for pieces
      * which can move by the rules of the game, each piece has a boolean which is changed to
      * reflect the outcome of the check;
@@ -170,6 +178,7 @@ public class LudoState extends GameState {
 
         //set movable boolean
         for (int i = (playerID_active*4); i < (playerID_active*4 +4); i ++) {
+            //first, check the pieces in home base
             if (pieces[i].getIsHome()) {
                 if (diceVal == 6) {
                     //is in home base and a 6 has been rolled
@@ -178,57 +187,27 @@ public class LudoState extends GameState {
                 } else {
                     pieces[i].setIsMovable(false);
                 }
-            } else if (pieces[i].getNumSpacesMoved() < 51) {
+            }
+            else if (pieces[i].getNumSpacesMoved() < 51) {
                 //in normal route
                 pieces[i].setIsMovable(true);
                 oneTrue = true;
-            } else if (pieces[i].getNumSpacesMoved() + diceVal < 57) {
+            }
+            else if (pieces[i].getNumSpacesMoved() + diceVal < 57) {
                 //in home stretch and total will be less than or equal to 56
                 pieces[i].setIsMovable(true);
                 oneTrue = true;
-            } else {
+            }
+            else if (pieces[i].getNumSpacesMoved() + diceVal > 57){
+                pieces[i].setIsMovable(false);
+
+            }
+            else {
                 pieces[i].setIsMovable(false);
             }
         }
 
         return oneTrue;
-    }
-
-    /**
-     * getter method for dice value
-     *
-     * @return value of dice
-     */
-    public int getDiceVal() {
-        return this.diceVal;
-    }
-
-    /**
-     * getter method for roll boolean
-     * @return true if allowed to make roll
-     */
-    public boolean getIsRollable() {
-        return isRollable;
-    }
-
-
-    /**fixed by Avery Guillermo!
-     *
-     * getter method to search for piece by reference to distance traveled
-     *
-     * @param playerID
-     * @param spacesTraveled
-     * @return
-     */
-    public int getTokenIndexByTravelDistance(int playerID, int spacesTraveled) {
-
-        //only iterates through players' 4 Tokens
-        for (int i = (playerID*4); i < (playerID*4 + 4); i++) {
-            if (pieces[i].getOwner() == playerID && pieces[i].getNumSpacesMoved() == spacesTraveled) {
-                return i;
-            }
-        }
-        return -1;
     }
 
 
@@ -249,7 +228,7 @@ public class LudoState extends GameState {
     public int getNumMovableTokens(int playerID) {
         int count = 0;
         for (int i = (playerID*4); i < (playerID*4 + 4); i++) {
-            if (pieces[i].getIsHome() == false && pieces[i].getReachedHomeBase() == false){
+            if (pieces[i].getIsHome() == false && pieces[i].getReachedHomeBase() == false && pieces[i].getIsMovable() == true){
                 int currentLocation = pieces[i].getNumSpacesMoved();
                 int homeBaseLocation = 56;
                 if(currentLocation>50){ //Inside homestretch
@@ -302,7 +281,8 @@ public class LudoState extends GameState {
                     pieces[indexOfCurrentToken].incNumSpacesMoved(diceVal);
                     incPlayerScore();
                     pieces[indexOfCurrentToken].setReachedHomeBase(true);
-                    Log.i("Player Scored a Point",""+playerScore[playerID]);
+                    this.scoredAPoint = true;
+                    Log.i("Player Scored a Point","His score is now "+playerScore[playerID]);
                 }
                 else if(diceVal+currentLocation < homeBaseLocation){
                     pieces[indexOfCurrentToken].incNumSpacesMoved(diceVal);
@@ -341,20 +321,45 @@ public class LudoState extends GameState {
                             {
                                 //changes boolean and numSpacesMoved back to 0
                                 pieces[i].setIsHome(true);
+                                killedAPiece = true;
+                                Log.i("A Piece was killed ", "The owner of the piece was: " + pieces[i].getOwner());
                             }
                         }
                 }
             }
-            //Now that we have moved the token, change the current player's turn!
-            if(diceVal != 6){
+            //determine whether or not to change the player's turn
+//            if(diceVal == 6 || this.killedAPiece == true || this.scoredAPoint == true){
+//                //According to Ludo Rules, if the player either rolled a six, killed a piece, or the player scored a point
+//                // then grant them another turn!
+//                stillPlayersTurn = true;
+//                isRollable = true;
+//            }
+//            else{//diceVal != 6
+//                //Change the current player's turn!
+//                changePlayerTurn();
+//            }
+
+            if(diceVal != 6 && this.killedAPiece == false && this.scoredAPoint == false){
+                //Change the current player's turn!
                 changePlayerTurn();
             }
-            else{ // diceVal == 6
+            else if(this.killedAPiece == true || this.scoredAPoint == true){
+                //According to Ludo Rules, if the player either rolled a six, killed a piece, or the player scored a point
+                // then grant them another turn!
                 stillPlayersTurn = true;
                 isRollable = true;
             }
+            else{ // diceVal == 6
+                //the player rolled a six, so they get to roll again!
+                stillPlayersTurn = true;
+                isRollable = true;
+            }
+            //reset all the boolean variables for the next roll
             canBringOutOfStart = false;
             canMovePiece = false; //now that the player moved the token, the player can't use the diceVal to move anymore!
+            killedAPiece = false;
+            scoredAPoint = false;
+
             return true;
         }
         else {
@@ -378,10 +383,9 @@ public class LudoState extends GameState {
 
     //implemented by Avery!
     //used for the computer player!
-    //TODO: Optimize this so that it gets the furthest piece out of start!
     public int getTokenIndexOfFirstPieceOutOfStart(int playerID){
         for(int i = (playerID*4); i<(playerID*4 + 4); i++){//traverse through the only the pieces the player owns
-            if(pieces[i].getIsHome() == false && pieces[i].getReachedHomeBase() == false){
+            if(pieces[i].getIsHome() == false && pieces[i].getReachedHomeBase() == false && pieces[i].getIsMovable() == true){
                 return i;
             }
         }
@@ -406,6 +410,24 @@ public class LudoState extends GameState {
 
         return output;
     }
+
+    /**
+     * getter method for dice value
+     *
+     * @return value of dice
+     */
+    public int getDiceVal() {
+        return this.diceVal;
+    }
+
+    /**
+     * getter method for roll boolean
+     * @return true if allowed to make roll
+     */
+    public boolean getIsRollable() {
+        return isRollable;
+    }
+
 
     public void setStillPlayersTurn(boolean b){
         this.stillPlayersTurn = b;
