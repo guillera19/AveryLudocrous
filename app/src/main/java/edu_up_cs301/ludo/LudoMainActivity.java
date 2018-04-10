@@ -8,7 +8,10 @@ import edu_up_cs301.game.LocalGame;
 import edu_up_cs301.game.config.GameConfig;
 import edu_up_cs301.game.config.GamePlayerType;
 
-
+/**
+ * LudoMainActivity
+ * It is the default start up screen
+ */
 public class LudoMainActivity extends GameMainActivity {
 
     // the port number that this game will use when playing over the network

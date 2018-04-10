@@ -1,13 +1,10 @@
 package edu_up_cs301.ludo;
 
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import edu_up_cs301.game.GameHumanPlayer;
 import edu_up_cs301.game.GameMainActivity;
@@ -18,66 +15,56 @@ import edu_up_cs301.game.infoMsg.IllegalMoveInfo;
 import edu_up_cs301.game.infoMsg.NotYourTurnInfo;
 
 /**
- * contains gui
- *
- * @Author: Avery Guillermo--> Edited on March 27, 2018
- *
- * TODO: everybody needs access to pieces, but only a copy of them,
+ *HumanPlayer
+ * The human determines, through this class, which actions to send
+ * specifically: which piece they want moved and if they roll a dice.
  */
 
 public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener, View.OnTouchListener {
-
     // to satisfy Serializable interface
     private static final long serialVersionUID = 3548793282648392873L;
-
-
     private LudoSurfaceView surfaceView;
     private Button rollDiceButton;
-
     // most recent state, an appropriately filled view of the game as given to us from LudoLocalGame
-
     private LudoState state;
-
     // the android activity that we are running
     private GameMainActivity myActivity;
 
-
     /**
      * constructor
-     *
      * @param name of player
      */
     public HumanPlayer(String name) {
         super(name);
     }
 
-
     /**
-     * Sets this player as the one attached to the GUI. Saves the
-     * activity, links listeners to IO to invoke specific methods.
+     * setAsGui
+     * @param activity GameMainActivity object
+     *  Sets this player as the one attached to the GUI. Saves the
+     *  activity, links listeners to IO to invoke specific methods.
      */
     @Override
     public void setAsGui(GameMainActivity activity) {
         //remember the activity
         myActivity = activity;
-
         activity.setContentView(R.layout.ludo_game_view);
-
         //find references
         surfaceView = (LudoSurfaceView) activity.findViewById(R.id.board_canvas);
         rollDiceButton = (Button) activity.findViewById(R.id.button_Roll);
         //set the listeners
         surfaceView.setOnTouchListener(this);
         rollDiceButton.setOnClickListener(this);
-
     }
 
+    /**
+     * getTopview
+     * @return the gui that is displayed currenty.
+     */
     @Override
     public View getTopView() {
         return myActivity.findViewById(R.id.top_gui_layout);
     }
-
-
     /**
      * Callback method, called when player gets a message
      *
@@ -85,10 +72,7 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
      */
     @Override
     public void receiveInfo(GameInfo info) {
-
         if (surfaceView == null) return;
-
-
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // if the move was out of turn or otherwise illegal, flash the screen
             surfaceView.flash(Color.RED, 50);
@@ -101,11 +85,13 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
             surfaceView.invalidate();
             Log.i("human player", "receiving");
         }
-
     }
 
-    /*
-     * Implemented by Avery Guillermo
+    /**
+     * onTouch
+     * @param v View object
+     * @param event Event Object
+     * @return Always returns true
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -116,16 +102,15 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
                 float yTouch = event.getY();
                 float width = surfaceView.getWidth();
                 float box = width / 15;
-
                 //create instance of gameAction
                 GameAction action = null;
                 int index;
                 index = getIndexOfPieceTouched(xTouch, yTouch, box);
-
                 if (index == -1) {
                     Log.i("OnTouch", "No piece was pressed");
                 }
                 else {
+                    //Checks to see if the the user touched inside the homebase
                     Log.i("OnTouch", "The piece that was touched was: " + index);
                     if (checkIfAHomeBaseWasTouched(xTouch, yTouch, box) == false) { //the user is trying to move a piece forward
                         action = new ActionMoveToken(this, index);
@@ -141,12 +126,16 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         return true;
     }
 
-
-    //TODO: OPTIMIZE when we assign the paths to the player
-    //TODO: This was just to see that when all the pieces were touched, we get the index back
+    /**
+     * getIndexOfPieceTouched
+     * Each peice has an index, this method gets that index
+     * @param xTouch
+     * @param yTouch
+     * @param box
+     * @return
+     */
     public int getIndexOfPieceTouched(float xTouch, float yTouch, float box) {
         boolean aHomeBaseWasTouched = checkIfAHomeBaseWasTouched(xTouch, yTouch, box);
-
         int playerID = this.playerNum;
         float xPos, yPos;
         for (int i = (playerID * 4); i < (playerID * 4 + 4); i++) {//traverse through the pieces the player owns
@@ -175,7 +164,13 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         return -1;//return negative 1 if no pieces were pressed!
     }
 
-
+    /**
+     *checkIfAHomeBaseWasTouched
+     * @param xTouch
+     * @param yTouch
+     * @param box
+     * @return
+     */
     public boolean checkIfAHomeBaseWasTouched(float xTouch, float yTouch, float box){
 
         //first check if the coordinates touched were in start base or actually on the board coordinates
@@ -196,13 +191,14 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         }
     }
 
-
+    /**
+     * onClick
+     * @param v a view object
+     */
     @Override
     public void onClick(View v) {
-
         //create instance of gameAction associated with button pressed
         GameAction action = null;
-
         if(v.getId() == rollDiceButton.getId()) {
             if (state.getWhoseMove() == this.playerNum) {
                 action = new ActionRollDice(this);

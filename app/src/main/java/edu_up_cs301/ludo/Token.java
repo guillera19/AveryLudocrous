@@ -1,9 +1,10 @@
 package edu_up_cs301.ludo;
-
-import android.graphics.Point;
-
 /**
- *  Edited by Avery Guillermo on 3/27/2019
+ * Token class
+ * This class contains the pieces of the game (4 re, 4 blue, 4 green, and 4 yellow)
+ * as well as the hardcoded paths that the tokens can take along the board. This class also
+ * determines if a piece can move or not, and its initial positions at the start of the game
+
  */
 
 public class Token {
@@ -21,6 +22,7 @@ public class Token {
 
     /**
      * constructor
+     * The constructor defines the hardcoded paths for each piece.
      */
     public Token(int ownsMe, double startX, double startY){
         numSpacesMoved = 0;
@@ -81,11 +83,8 @@ public class Token {
                         {14, 7}, {14, 8}, {13, 8}, {12, 8}, {11, 8}, {10, 8},
                         {9, 8}, {8, 9}, {8, 10}, {8, 11}, {8, 12}, {8, 13},
                         {8, 14}, {7, 14}, {7, 13}, {7, 12}, {7, 11}, {7, 10}, {7, 9}, {7, 8}};
-
                 break;
         }
-
-
     }
 
     /**
@@ -106,60 +105,43 @@ public class Token {
     public int getCurrentXLoc(){
         return this.path[this.numSpacesMoved][0];
     }
-
     public int getCurrentYLoc(){
         return this.path[this.numSpacesMoved][1];
     }
-
-
     public int getNumSpacesMoved() {
         return numSpacesMoved;
     }
-
-    //fixed by Avery
     public void incNumSpacesMoved(int numDiceVal) {
         this.numSpacesMoved = numDiceVal + this.numSpacesMoved;
     }
-
     public double getStartXPos() {
         return this.startXPos;
     }
-
-
     public double getStartYPos() {
         return this.startYPos;
     }
-
-
     public boolean getIsMovable() {
         return isMovable;
     }
-
     public void setIsMovable(boolean movable) {
         isMovable = movable;
     }
-
     public boolean getIsHome() {
         return isHome;
     }
-
     public void setIsHome(boolean home) {
         if(home){
             this.numSpacesMoved = 0;
         }
         isHome = home;
     }
-
     public int getOwner() {
         return owner;
     }
-
     public void setReachedHomeBase(boolean bol){
         this.reachedHomeBase = bol;
     }
-
     public boolean getReachedHomeBase(){
         return reachedHomeBase;
     }
-
 }

@@ -4,10 +4,9 @@ import edu_up_cs301.game.GamePlayer;
 import edu_up_cs301.game.actionMsg.GameAction;
 
 /**
- * @Author: Avery Guillermo
- * Edited By Avery Guillermo
+ * ActionMoveToken class
+ * Game action that is sent to LudoLocalgame
  */
-
 public class ActionMoveToken extends GameAction {
 
     private int index;

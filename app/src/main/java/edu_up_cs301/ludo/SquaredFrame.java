@@ -1,8 +1,18 @@
 package edu_up_cs301.ludo;
 
 /**
- * Created by ravin on 3/26/2018.
+ * SquaredFrame
+ * this allows the gui to be a perfect square
  */
+
+/**Extern Citations
+ * http://blog.nkdroidsolutions.com/how-to-make-a-square-layout-in-android-example/
+ *https://stackoverflow.com/questions/8981029/simple-way-to-do-dynamic-but-square-layout
+ *Usage: We were not getting a perfect square as a gui layout. For some reason it was off by a few
+ * pixels. Instead of making all the boxes strange floats so as to divide up the screen, we used a
+ * square layout instead.
+ */
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Display;

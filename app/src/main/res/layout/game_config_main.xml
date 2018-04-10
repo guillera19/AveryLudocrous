@@ -33,6 +33,17 @@
             android:text="@string/start_the_game" />
 
         <Button
+            android:id="@+id/button_Rules"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="375dp"
+            android:paddingRight="10dp"
+            android:text="Rules" />
+
+        <Button
             android:id="@+id/backButton2"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"

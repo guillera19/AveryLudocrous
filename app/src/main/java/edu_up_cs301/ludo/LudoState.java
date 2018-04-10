@@ -2,17 +2,12 @@ package edu_up_cs301.ludo;
 
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Random;
- import edu_up_cs301.game.GamePlayer;
-import edu_up_cs301.game.actionMsg.GameAction;
 import edu_up_cs301.game.infoMsg.GameState;
 
 /**
+ * Ludo State
  * This contains the official state for the Ludo Game.
- * <p>
- *
- *
  * based on GameFramework by Steven R. Vegdahl
  * CounterGame
  * TickTackToe2
@@ -21,6 +16,7 @@ import edu_up_cs301.game.infoMsg.GameState;
  * @author Raj Nayyar
  * @author Avery Guillermo
  * @author Luke Danowski
+ * @author Chris Sebrechts
  */
 
 public class LudoState extends GameState {
@@ -42,11 +38,8 @@ public class LudoState extends GameState {
     private boolean scoredAPoint;
 
     /**
-     * Fixed by Avery Guillermo!
-     *
-     * constructor, initializing from parameter
-     * <p>
-     * the value to which the counter's value should be initialized
+     * LudoState
+     *  Initializing the entire state on its first creation
      */
     public LudoState() {
         scoredAPoint = false;
@@ -83,10 +76,9 @@ public class LudoState extends GameState {
 
 
     /**
-     * Fixed by Avery Guillermo!
-     *
-     * copy constructor; makes a copy of the original object
-     *
+     * Ludostate
+     * coppies the entire game state
+     * (It is a copy constructor)
      * @param original the object from which the copy should be made
      */
     public LudoState(LudoState original) {
@@ -115,8 +107,8 @@ public class LudoState extends GameState {
     }
 
     /**
+     * getWhoseMove
      * Tells whose move it is.
-     *
      * @return the index (0 or 1) of the player whose move it is.
      */
     public int getWhoseMove() {
@@ -125,6 +117,7 @@ public class LudoState extends GameState {
 
 
     /**
+     * getPlayerScore
      * getter method for score
      * @return score array
      */
@@ -133,6 +126,7 @@ public class LudoState extends GameState {
     }
 
     /**
+     * getNumplayers
      * getter method for numPlayers
      * @return number of active players
      */
@@ -141,6 +135,7 @@ public class LudoState extends GameState {
     }
 
     /**
+     * newRoll
      * generates a new random roll if player is allowed to play.
      * considers if it is their turn and if roll a 6, they get to roll again
      *
@@ -164,8 +159,7 @@ public class LudoState extends GameState {
     }
 
     /**
-     * Fixed by Avery Guillermo: Didn't handle the case of in homestretch and diceVal + numSpacesMoved != HomeBase
-     *
+     * updateMovesAvailable
      * Called after a dice roll. We go through the active player's pieces and checks for pieces
      * which can move by the rules of the game, each piece has a boolean which is changed to
      * reflect the outcome of the check;
@@ -213,13 +207,14 @@ public class LudoState extends GameState {
 
     /**
      * increments player score
+     * increments player score
      */
     public void incPlayerScore() {
         playerScore[playerID_active]++;
     }
 
     /**
-     * Fixed By Avery Guillermo!
+     * getNumMovableTokens
      *
      * returns the number of pieces which are in play
      //     * @param playerID
@@ -245,7 +240,11 @@ public class LudoState extends GameState {
         return count;
     }
 
-    //implemented by Avery
+    /**
+     * changePlayerTurn
+     *
+     * this changes the players turn
+     */
     public void changePlayerTurn(){
         this.stillPlayersTurn = false;
 
@@ -260,19 +259,19 @@ public class LudoState extends GameState {
     }
 
 
-    /**Edited by Avery Guillermo
-     *
+    /**
+     *advanceToken
+     * This advances the token
+     * it handles the killing of opponent pieces
+     * it determines if a piece can move while within the homestrech row.
      * @param playerID
      * @param index
      * @return
      */
     public boolean advanceToken(int playerID, int index) {
-
         int indexOfCurrentToken = index;
-
         //only act on movable pieces. Always updated after each dice roll.
         if(pieces[indexOfCurrentToken].getIsMovable()) {
-
             int currentLocation = pieces[indexOfCurrentToken].getNumSpacesMoved();
             int homeBaseLocation = 56;
             //Inside homestretch
@@ -287,18 +286,13 @@ public class LudoState extends GameState {
                 else if(diceVal+currentLocation < homeBaseLocation){
                     pieces[indexOfCurrentToken].incNumSpacesMoved(diceVal);
                 }
-
             }
             else{
                 pieces[indexOfCurrentToken].incNumSpacesMoved(diceVal);
             }
-
-
             int spacesPieceHasTraveled = pieces[indexOfCurrentToken].getNumSpacesMoved();
-
             // check for overlap on non-safe tiles
             if (spacesPieceHasTraveled < 51) {// 51 is the number of tiles till homestretch
-
                 //consider where piece is
                 switch (spacesPieceHasTraveled) {
                     //safe tiles
@@ -327,17 +321,6 @@ public class LudoState extends GameState {
                         }
                 }
             }
-            //determine whether or not to change the player's turn
-//            if(diceVal == 6 || this.killedAPiece == true || this.scoredAPoint == true){
-//                //According to Ludo Rules, if the player either rolled a six, killed a piece, or the player scored a point
-//                // then grant them another turn!
-//                stillPlayersTurn = true;
-//                isRollable = true;
-//            }
-//            else{//diceVal != 6
-//                //Change the current player's turn!
-//                changePlayerTurn();
-//            }
 
             if(diceVal != 6 && this.killedAPiece == false && this.scoredAPoint == false){
                 //Change the current player's turn!
@@ -369,8 +352,13 @@ public class LudoState extends GameState {
     }
 
 
-
-    //implemented by Avery!
+    /**
+     * getTokenIndexOfFirstPieceInStart
+     * Gets the Token Index Of The First Piece In Start
+     * mainly used by the computer players
+     * @param playerID
+     * @return
+     */
     public int getTokenIndexOfFirstPieceInStart(int playerID){
         for(int i = (playerID*4); i<(playerID*4 + 4); i++){//traverse through the only the pieces the player owns
             if(pieces[i].getIsHome() == true){
@@ -378,10 +366,13 @@ public class LudoState extends GameState {
             }
         }
         return -1;
-
     }
 
-    //implemented by Avery!
+    /**
+     * getTokenIndexOfFirstPieceOutOfStart
+     * @param playerID
+     * @return returns -1 when there is no piece in the base
+     */
     //used for the computer player!
     public int getTokenIndexOfFirstPieceOutOfStart(int playerID){
         for(int i = (playerID*4); i<(playerID*4 + 4); i++){//traverse through the only the pieces the player owns
@@ -390,14 +381,15 @@ public class LudoState extends GameState {
             }
         }
         return -1;
-
     }
 
-
+    /**
+     * toString
+     * @return
+     */
     @Override
     public String toString()
     {
-
         String output = "";
         for (int i = 0; i < 4; i++) {
             output+= "\nPlayer " + pieces[i].getOwner() + ": ";

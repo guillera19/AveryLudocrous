@@ -4,7 +4,9 @@ import edu_up_cs301.game.GameComputerPlayer;
 import edu_up_cs301.game.infoMsg.GameInfo;
 
 /**
- * Created by Luke on 3/4/2018.
+ * ComputerSmartPlayer
+ * This will contain the smart AI
+ * Has Not Been Implemented
  */
 
 public class ComputerSmartPlayer extends GameComputerPlayer {

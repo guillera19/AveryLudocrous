@@ -7,23 +7,22 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.SurfaceView;
 
 import edu_up_cs301.game.util.FlashSurfaceView;
 
 
 /**
- * onDraw method Created by nayyar19 and guillermo19 on 2/3/2018.
- *
- * @author Avery Guillermo
+ * LudoSurfaceView
+ * This draws the entire board, all the pieces, and the dice.
+ * It also updates the board according to touch events and button presses * *
  */
 
 public class LudoSurfaceView extends FlashSurfaceView {
-
     protected LudoState state = new LudoState();
 
-
+    /**
+     * Constructors
+     */
     public LudoSurfaceView(Context context) {
         super(context);
         setWillNotDraw(false);
@@ -41,8 +40,9 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
 
     /**
-     * override the onDraw() method to draw cool stuff for students to see
-     *
+     * onDraw
+     *the starting place for all drawing that takes place
+     * implements the use of helper methods.
      * @param canvas - draw on this
      */
     @Override
@@ -50,7 +50,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
         //define the canvas instance variables
         float heightAndWidth = canvas.getWidth();//height and width are the same because the surface view is a square
         float box = heightAndWidth / 15;
-
         //Draw a green filled square
         //Creating Color Objects
         Paint greenPaint = new Paint();
@@ -68,7 +67,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
         whitePaint.setColor(Color.rgb(255, 255, 255));
         whitePaint2.setColor(Color.rgb(255, 255, 255));
         blackPaint.setColor(Color.rgb(0, 0, 0));
-
 
         //Drawing all HomeStretch and Opening Tiles
         float i, j;
@@ -218,7 +216,14 @@ public class LudoSurfaceView extends FlashSurfaceView {
     }
 
 
-
+    /**
+     * drawStar
+     * @param xPos  the initial x pos of the star
+     * @param yPos  the initial y pos of the star
+     * @param canvas Canvas object
+     * @param box This is the width of the board divided by 15. This is used to scale everything
+     *            according to the screens dimensions
+     */
     public void drawStar(float xPos,  float yPos, Canvas canvas, float box){
         Paint whitePaint = new Paint();
         whitePaint.setColor(Color.rgb(255,255,255));
@@ -255,10 +260,17 @@ public class LudoSurfaceView extends FlashSurfaceView {
         topStar.lineTo(p4.x,p4.y);
         topStar.close();
         canvas.drawPath(topStar,whitePaint);
-
     }
 
-
+    /**
+     * drawDice
+     *
+     * This draws the dice according to who's turn it is.
+     *
+     * @param canvas Canvas object
+     * @param box This is the width of the board divided by 15. This is used to scale everything
+    according to the screens dimensions
+     */
     public void drawDice(Canvas canvas, float box){
         Paint greyPaint = new Paint();         greyPaint.setColor(Color.rgb(100,100,100));
         Paint redPaint = new Paint();          redPaint.setColor(Color.rgb(255,0,0));
@@ -312,6 +324,14 @@ public class LudoSurfaceView extends FlashSurfaceView {
         }
     }
 
+    /**
+     * drawDots
+     * This draws the exact number of dots according to the dice roll
+     * @param xPos  the initial x pos of the star
+     * @param yPos  the initial y pos of the star
+     * @param canvas Canvas object
+     * @param color
+     */
     public void drawDots(float xPos, float yPos, float shift ,int diceVal,Canvas canvas, Paint color){
         switch (diceVal){
             case 1:
@@ -352,8 +372,16 @@ public class LudoSurfaceView extends FlashSurfaceView {
         }
     }
 
-
-
+    /**
+     * drawStartTiles
+     * This draws the start tiles
+     * @param box This is the width of the board divided by 15. This is used to scale everything
+    according to the screens dimensions
+     * @param canvas canvas object
+     * @param paint  paint object
+     * @param xShfit X Shift to reuse the same code the draw the start tiles in all four corners
+     * @param yShift Y Shift to reuse the same code the draw the start tiles in all four corners
+     */
     public void drawStartTiles(float box,Canvas canvas,Paint paint,float xShfit, float yShift){
 
         int box1X1=(int)(box*2.3),box1Y1=(int)(box*0.7), box1X2=(int)(box*3.7), box1Y2=(int)(box*2.1);
@@ -367,9 +395,14 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
     }
 
-    //created by Avery Guillermo
+    /**
+     * drawPieces
+     * this draws the pieces. They are moved according to touch events etc.
+     * @param canvas Canvas objects
+     * @param box This is the width of the board divided by 15. This is used to scale everything
+     *            according to the screens dimensions
+     */
     public void drawPieces(Canvas canvas, float box){
-
         Paint greenPaint = new Paint();
         Paint redPaint = new Paint();
         Paint bluePaint = new Paint();
@@ -380,7 +413,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
         bluePaint.setColor(Color.rgb(75,150,255));
         yellowPaint.setColor(Color.rgb(230, 190, 70));
         whitePaint.setColor(Color.rgb(255,255,255));
-
         int xPos, yPos;
         for(int i =0; i<16; i++){
             if(state.pieces[i].getIsHome()==false){//draw the pieces out of base

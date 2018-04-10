@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -70,6 +72,8 @@ public abstract class GameMainActivity extends Activity implements
 	// whether the game is in the "configuration" stage, before the actual game
 	// has started
 	private boolean doingConfiguration = true;
+
+	private Button rulesButton;
 
 	/**
 	 * contains the game configuration this activity will be used to initialize
@@ -143,6 +147,21 @@ public abstract class GameMainActivity extends Activity implements
 
 		// Initialize the layout
 		setContentView(R.layout.game_config_main);
+		rulesButton = (Button) findViewById(R.id.button_Rules);
+		rulesButton.setOnClickListener(new View.OnClickListener()
+
+		/**
+		 External Citation
+		 Date:     April 9 2019
+		 Problem:  Did not know how to make another XML pop up when the user presses the Rules Button
+		 Resource: https://www.youtube.com/watch?v=bgIUdb-7Rqo
+		 Solution: I used the example code from this youtube video. The code below is from this video
+		 */
+		{
+			public void onClick(View v){
+				openRulesActivity();
+			}
+		});
 
 		// create the default configuration for this game
 		this.config = createDefaultConfig();
@@ -805,6 +824,19 @@ public abstract class GameMainActivity extends Activity implements
 	 */
 	public void doFinish(View v) {
 		finish();
+	}
+
+
+	/**
+	 External Citation
+	 Date:     April 9 2019
+	 Problem:  Did not know how to make another XML pop up when the user presses the Rules Button
+	 Resource: https://www.youtube.com/watch?v=bgIUdb-7Rqo
+	 Solution: I used the example code from this youtube video. The code below is from this video
+	 */
+	public void openRulesActivity(){
+		Intent intent = new Intent(this, RulesActivity.class);
+		startActivity(intent);
 	}
 }
 
