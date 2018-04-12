@@ -92,6 +92,15 @@ public class LudoLocalGame extends LocalGame {
                     state.changePlayerTurn();
                     return true;
                 }
+                //if the player rolls a six and doesn't have any pieces in start to bring out
+                //and can't move any tokens
+                if(state.getDiceVal() ==6
+                        && state.getNumMovableTokens(playerID) ==0
+                        && state.getTokenIndexOfFirstPieceInStart(playerID) == -1){
+                    state.changePlayerTurn();
+                    return true;
+                }
+                
                 state.setCanMovePiece(true);
                 //if the player did not roll a six but can move a single piece
                 if(state.getDiceVal() !=6 && state.getNumMovableTokens(playerID) == 1){

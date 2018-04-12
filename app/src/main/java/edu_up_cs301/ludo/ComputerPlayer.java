@@ -31,8 +31,8 @@ public class ComputerPlayer extends GameComputerPlayer {
         LudoState myState = (LudoState)info;
         // if it's not our move, ignore it
         if (myState.getWhoseMove() != this.playerNum) return;
-        // sleep for 0.7 seconds to slow down the game
-        sleep(700);
+        // sleep for 0.3 seconds to slow down the game
+        sleep(300);
         //if it is the computer's turn to roll
         if(myState.getWhoseMove() == this.playerNum){
             if(myState.getIsRollable()) {
