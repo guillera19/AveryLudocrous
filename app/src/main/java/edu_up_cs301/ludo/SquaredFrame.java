@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SquaredFrame extends RelativeLayout{
+
     public SquaredFrame(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

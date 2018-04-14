@@ -81,7 +81,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
         //draw the black background
         canvas.drawRect(0f, 0f, heightAndWidth, heightAndWidth, blackPaint);
 
-
         //Drawing all HomeStretch and Opening Tiles
         float i, j;
         for (i = box; i < (box * 6); i = i + box) {
@@ -114,108 +113,18 @@ public class LudoSurfaceView extends FlashSurfaceView {
             }
         }
 
-        //Red Large Tile Section Creation
-        canvas.drawRect(0, 0, (box * 6), (box * 6), redPaint);
-        PointF d11 = new PointF(box * 3, 0);
-        PointF d12 = new PointF(box * 6, box * 3);
-        PointF d13 = new PointF((box * 3), (box * 6));
-        PointF d14 = new PointF((box * 0), (box * 3)); //Bottom Left
-        //Drawing the red diamond
-        Path redDiamond = new Path();
-        redDiamond.moveTo(d11.x, d11.y);
-        redDiamond.lineTo(d12.x, d12.y);
-        redDiamond.lineTo(d13.x, d13.y);
-        redDiamond.lineTo(d14.x, d14.y);
-        redDiamond.close();
-        canvas.drawPath(redDiamond, whitePaint);
-        drawStartTiles(box, canvas, redPaint, 0, 0);
+        //draw red HomeBase
+        drawHomeBase(canvas, box, 0, 0, redPaint, whitePaint);
+        //draw green HomeBase
+        drawHomeBase(canvas, box, box*9, 0, greenPaint, whitePaint);
+        //draw yellow HomeBase
+        drawHomeBase(canvas, box, box*9, box*9, yellowPaint, whitePaint);
+        //draw blue HomeBase
+        drawHomeBase(canvas, box, 0, box*9, bluePaint, whitePaint);
 
-        //Green Large Tile Section Creation
-        canvas.drawRect((box * 9), 0.0f, (box * 15), (box * 6), greenPaint);
-        PointF d21 = new PointF(box * 12, 0);
-        PointF d22 = new PointF(box * 15, box * 3);
-        PointF d23 = new PointF((box * 12), (box * 6));
-        PointF d24 = new PointF((box * 9), (box * 3)); //Bottom Left
-        //Drawing the green diamond
-        Path greenDiamond = new Path();
-        greenDiamond.moveTo(d21.x, d21.y);
-        greenDiamond.lineTo(d22.x, d22.y);
-        greenDiamond.lineTo(d23.x, d23.y);
-        greenDiamond.lineTo(d24.x, d24.y);
-        greenDiamond.close();
-        canvas.drawPath(greenDiamond, whitePaint);
-        drawStartTiles(box, canvas, greenPaint, box * 9, 0);
-
-        //Blue Large Tile Section Creation
-        canvas.drawRect((box * 0), box * 9, (box * 6), (box * 15), bluePaint);
-        PointF d31 = new PointF(box * 3, box * 9);
-        PointF d32 = new PointF(box * 6, box * 12);
-        PointF d33 = new PointF((box * 3), (box * 15));
-        PointF d34 = new PointF((box * 0), (box * 12)); //Bottom Left
-        //Drawing the blue diamond
-        Path blueDiamond = new Path();
-        blueDiamond.moveTo(d31.x, d31.y);
-        blueDiamond.lineTo(d32.x, d32.y);
-        blueDiamond.lineTo(d33.x, d33.y);
-        blueDiamond.lineTo(d34.x, d34.y);
-        blueDiamond.close();
-        canvas.drawPath(blueDiamond, whitePaint);
-        drawStartTiles(box, canvas, bluePaint, 0, box * 9);
-
-        //Yellow Large Tile Section Creation
-        canvas.drawRect((box * 9), (box * 9), (box * 15), (box * 15), yellowPaint);
-        PointF d41 = new PointF(box * 12, box * 9);
-        PointF d42 = new PointF(box * 15, box * 12);
-        PointF d43 = new PointF((box * 12), (box * 15));
-        PointF d44 = new PointF((box * 9), (box * 12)); //Bottom Left
-        //Drawing the yellow diamond
-        Path yellowDiamond = new Path();
-        yellowDiamond.moveTo(d41.x, d41.y);
-        yellowDiamond.lineTo(d42.x, d42.y);
-        yellowDiamond.lineTo(d43.x, d43.y);
-        yellowDiamond.lineTo(d44.x, d44.y);
-        yellowDiamond.close();
-        canvas.drawPath(yellowDiamond, whitePaint);
-        drawStartTiles(box, canvas, yellowPaint, box * 9, box * 9);
 
         //Drawing Center Square
-        canvas.drawRect((box * 6), (box * 6), (box * 9), (box * 9), whitePaint);
-        PointF p1 = new PointF((box * 6), (box * 6)); //Top Left
-        PointF p2 = new PointF((canvas.getWidth() / 2), (canvas.getWidth() / 2)); //Dead Center
-        PointF p3 = new PointF((box * 9), (box * 6)); //Top Right
-        PointF p4 = new PointF((box * 6), (box * 9)); //Bottom Left
-        PointF p5 = new PointF((box * 9), (box * 9)); //Bottom Right
-        //Drawing the green Center Triangle
-        Path tri1 = new Path();
-        tri1.moveTo(p1.x, p1.y);
-        tri1.lineTo(p2.x, p2.y);
-        tri1.lineTo(p3.x, p3.y);
-        tri1.close();
-        canvas.drawPath(tri1, greenPaint);
-
-        //Drawing the red Center Triangle
-        Path tri2 = new Path();
-        tri2.moveTo(p1.x, p1.y);
-        tri2.lineTo(p2.x, p2.y);
-        tri2.lineTo(p4.x, p4.y);
-        tri2.close();
-        canvas.drawPath(tri2, redPaint);
-
-        //Drawing the blue Center Triangle
-        Path tri3 = new Path();
-        tri3.moveTo(p4.x, p4.y);
-        tri3.lineTo(p2.x, p2.y);
-        tri3.lineTo(p5.x, p5.y);
-        tri3.close();
-        canvas.drawPath(tri3, bluePaint);
-
-        //Drawing the yellow Center Triangle
-        Path tri4 = new Path();
-        tri4.moveTo(p3.x, p3.y);
-        tri4.lineTo(p2.x, p2.y);
-        tri4.lineTo(p5.x, p5.y);
-        tri4.close();
-        canvas.drawPath(tri4, yellowPaint);
+        drawCenterSquare(canvas, box, whitePaint, redPaint, greenPaint, yellowPaint, bluePaint);
 
         //draw the safe space tiles
         drawStar((box * 2), (box * 8), canvas, box);
@@ -558,7 +467,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
                 }
             }
         }
-
         if (overlapHappened == true) {
             drawOverlapPieces(canvas, box, xPos, yPos, overlapPieceIndexies, paints);
         } else {
@@ -636,6 +544,64 @@ public class LudoSurfaceView extends FlashSurfaceView {
                 break;
         }
 
+    }
+
+    public void drawHomeBase(Canvas canvas, float box, float xPos, float yPos, Paint colorPaint, Paint whitePaint){
+        canvas.drawRect(xPos + 0, yPos + 0, xPos + (box * 6), yPos + (box * 6), colorPaint);
+        PointF d11 = new PointF(xPos + box * 3, yPos +0);
+        PointF d12 = new PointF(xPos + box * 6, yPos + box * 3);
+        PointF d13 = new PointF(xPos + (box * 3), yPos + (box * 6));
+        PointF d14 = new PointF((xPos + box * 0),  yPos + (box * 3)); //Bottom Left
+        //Drawing the red diamond
+        Path redDiamond = new Path();
+        redDiamond.moveTo(d11.x, d11.y);
+        redDiamond.lineTo(d12.x, d12.y);
+        redDiamond.lineTo(d13.x, d13.y);
+        redDiamond.lineTo(d14.x, d14.y);
+        redDiamond.close();
+        canvas.drawPath(redDiamond, whitePaint);
+        drawStartTiles(box, canvas, colorPaint, xPos + 0, yPos + 0);
+
+    }
+
+    public void drawCenterSquare(Canvas canvas, float box, Paint whitePaint, Paint redPaint, Paint greenPaint, Paint yellowPaint, Paint bluePaint){
+        canvas.drawRect((box * 6), (box * 6), (box * 9), (box * 9), whitePaint);
+        PointF p1 = new PointF((box * 6), (box * 6)); //Top Left
+        PointF p2 = new PointF((canvas.getWidth() / 2), (canvas.getWidth() / 2)); //Dead Center
+        PointF p3 = new PointF((box * 9), (box * 6)); //Top Right
+        PointF p4 = new PointF((box * 6), (box * 9)); //Bottom Left
+        PointF p5 = new PointF((box * 9), (box * 9)); //Bottom Right
+        //Drawing the green Center Triangle
+        Path tri1 = new Path();
+        tri1.moveTo(p1.x, p1.y);
+        tri1.lineTo(p2.x, p2.y);
+        tri1.lineTo(p3.x, p3.y);
+        tri1.close();
+        canvas.drawPath(tri1, greenPaint);
+
+        //Drawing the red Center Triangle
+        Path tri2 = new Path();
+        tri2.moveTo(p1.x, p1.y);
+        tri2.lineTo(p2.x, p2.y);
+        tri2.lineTo(p4.x, p4.y);
+        tri2.close();
+        canvas.drawPath(tri2, redPaint);
+
+        //Drawing the blue Center Triangle
+        Path tri3 = new Path();
+        tri3.moveTo(p4.x, p4.y);
+        tri3.lineTo(p2.x, p2.y);
+        tri3.lineTo(p5.x, p5.y);
+        tri3.close();
+        canvas.drawPath(tri3, bluePaint);
+
+        //Drawing the yellow Center Triangle
+        Path tri4 = new Path();
+        tri4.moveTo(p3.x, p3.y);
+        tri4.lineTo(p2.x, p2.y);
+        tri4.lineTo(p5.x, p5.y);
+        tri4.close();
+        canvas.drawPath(tri4, yellowPaint);
     }
 
 }

@@ -444,4 +444,6 @@ public class LudoState extends GameState {
     public boolean getCanMovePiece(){
         return this.canMovePiece;
     }
+
+
 }

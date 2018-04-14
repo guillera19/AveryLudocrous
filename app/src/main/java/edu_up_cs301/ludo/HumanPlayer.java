@@ -80,7 +80,8 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // if the move was out of turn or otherwise illegal, flash the screen
             surfaceView.flash(Color.RED, 50);
-        } else if (!(info instanceof LudoState))
+        }
+        else if (!(info instanceof LudoState))
             // if we do not have a LudoState, ignore
             return;
         else {
@@ -88,6 +89,13 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
             state = (LudoState) info;
             surfaceView.invalidate();
             Log.i("human player", "receiving");
+            if(state.getWhoseMove() == playerNum){
+                rollDiceButton.setVisibility(View.VISIBLE);
+            }
+            else{
+                rollDiceButton.setVisibility(View.INVISIBLE);
+            }
+
         }
     }
 
@@ -119,9 +127,13 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
                     if (checkIfAHomeBaseWasTouched(xTouch, yTouch, box) == false) { //the user is trying to move a piece forward
                         action = new ActionMoveToken(this, index);
                         game.sendAction(action);
-                    } else { // the user is trying to move a piece out of start base
-                        action = new ActionRemoveFromBase(this, index);
-                        game.sendAction(action);
+                    }
+                    else { // the user is trying to move a piece out of start base
+                        //TODO I CHANGED  THIS!
+                        if(state.getTokenIndexOfFirstPieceInStart(playerNum) != -1){
+                            action = new ActionRemoveFromBase(this, index);
+                            game.sendAction(action);
+                        }
                     }
                 }
             }
@@ -204,14 +216,8 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
                 action = new ActionRollDice(this);
                 Log.i("Onclick", "Human Player Rolling Dice");
                 game.sendAction(action);
-            } else {
-                //do nothing since its not your turn
             }
-        } else {
-            //do nothing
-            return;
         }
     }
 
 }
-

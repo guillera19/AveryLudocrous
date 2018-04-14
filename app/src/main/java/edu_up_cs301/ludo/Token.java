@@ -1,4 +1,7 @@
 package edu_up_cs301.ludo;
+
+import java.io.Serializable;
+
 /**
  * Token class
  * This class contains the pieces of the game (4 re, 4 blue, 4 green, and 4 yellow)
@@ -7,7 +10,9 @@ package edu_up_cs301.ludo;
 
  */
 
-public class Token {
+public class Token implements Serializable{
+
+    private static final long serialVersionUID = 1433248382648392873L;
 
     //instance variables
     private int numSpacesMoved;

@@ -36,12 +36,12 @@ public class LudoMainActivity extends GameMainActivity {
             public GamePlayer createPlayer(String name) {
                 return new HumanPlayer(name);
             }});
-//
-//        //TODO add smart computer player
-//        playerTypes.add(new GamePlayerType("Smart Computer Player") {
-//            public GamePlayer createPlayer(String name) {
-//                return new ComputerSmartPlayer(name);
-//            }});
+
+
+        playerTypes.add(new GamePlayerType("Smart Computer Player") {
+            public GamePlayer createPlayer(String name) {
+                return new ComputerSmartPlayer(name);
+            }});
 
         playerTypes.add(new GamePlayerType("Computer Easy") {
             public GamePlayer createPlayer(String name) {
@@ -52,7 +52,6 @@ public class LudoMainActivity extends GameMainActivity {
         GameConfig defaultConfig = new GameConfig(playerTypes, 1, 4, "Ludo", PORT_NUMBER);
         defaultConfig.addPlayer("Human", 0); // player 1: a human player
         defaultConfig.addPlayer("ComputerEasy2", 1); // player 2: a computer player
-        //TODO add smart computer Player
         defaultConfig.addPlayer("ComputerEasy3", 1);
         defaultConfig.addPlayer("ComputerEasy4", 1);
         defaultConfig.setRemoteData("Remote Human Player", "", 0);
