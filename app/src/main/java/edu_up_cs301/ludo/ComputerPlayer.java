@@ -38,6 +38,7 @@ public class ComputerPlayer extends GameComputerPlayer {
             if(myState.getIsRollable()) {
                 Log.i("Computer Player: " + this.playerNum, "Rolling the dice");
                 game.sendAction(new ActionRollDice(this));
+                return;
             }
             int index;
             index = myState.getTokenIndexOfFirstPieceOutOfStart(this.playerNum);
@@ -50,6 +51,7 @@ public class ComputerPlayer extends GameComputerPlayer {
             index = myState.getTokenIndexOfFirstPieceInStart(this.playerNum);
             if (index != -1) {
                 game.sendAction(new ActionRemoveFromBase(this, index));
+                return;
             }
         }
     }

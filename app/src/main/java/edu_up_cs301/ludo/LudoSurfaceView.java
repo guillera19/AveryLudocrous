@@ -79,7 +79,7 @@ public class LudoSurfaceView extends FlashSurfaceView {
 
 
         //draw the black background
-        canvas.drawRect(0f, 0f, heightAndWidth, heightAndWidth, blackPaint);
+        this.setBackgroundColor(Color.BLACK);
 
         //Drawing all HomeStretch and Opening Tiles
         float i, j;
@@ -112,6 +112,7 @@ public class LudoSurfaceView extends FlashSurfaceView {
                 canvas.drawRect(i, j, (float) (i + box), (float) (i + box), whitePaint2);
             }
         }
+
 
         //draw red HomeBase
         drawHomeBase(canvas, box, 0, 0, redPaint, whitePaint);
@@ -475,6 +476,64 @@ public class LudoSurfaceView extends FlashSurfaceView {
         }
     }
 
+    public void drawHomeBase(Canvas canvas, float box, float xPos, float yPos, Paint colorPaint, Paint whitePaint){
+        canvas.drawRect(xPos + 0, yPos + 0, xPos + (box * 6), yPos + (box * 6), colorPaint);
+        PointF d11 = new PointF(xPos + box * 3, yPos +0);
+        PointF d12 = new PointF(xPos + box * 6, yPos + box * 3);
+        PointF d13 = new PointF(xPos + (box * 3), yPos + (box * 6));
+        PointF d14 = new PointF((xPos + box * 0),  yPos + (box * 3)); //Bottom Left
+        //Drawing the red diamond
+        Path redDiamond = new Path();
+        redDiamond.moveTo(d11.x, d11.y);
+        redDiamond.lineTo(d12.x, d12.y);
+        redDiamond.lineTo(d13.x, d13.y);
+        redDiamond.lineTo(d14.x, d14.y);
+        redDiamond.close();
+        canvas.drawPath(redDiamond, whitePaint);
+        drawStartTiles(box, canvas, colorPaint, xPos + 0, yPos + 0);
+
+    }
+
+    public void drawCenterSquare(Canvas canvas, float box, Paint whitePaint, Paint redPaint, Paint greenPaint, Paint yellowPaint, Paint bluePaint){
+        canvas.drawRect((box * 6), (box * 6), (box * 9), (box * 9), whitePaint);
+        PointF p1 = new PointF((box * 6), (box * 6)); //Top Left
+        PointF p2 = new PointF((canvas.getWidth() / 2), (canvas.getWidth() / 2)); //Dead Center
+        PointF p3 = new PointF((box * 9), (box * 6)); //Top Right
+        PointF p4 = new PointF((box * 6), (box * 9)); //Bottom Left
+        PointF p5 = new PointF((box * 9), (box * 9)); //Bottom Right
+        //Drawing the green Center Triangle
+        Path tri1 = new Path();
+        tri1.moveTo(p1.x, p1.y);
+        tri1.lineTo(p2.x, p2.y);
+        tri1.lineTo(p3.x, p3.y);
+        tri1.close();
+        canvas.drawPath(tri1, greenPaint);
+
+        //Drawing the red Center Triangle
+        Path tri2 = new Path();
+        tri2.moveTo(p1.x, p1.y);
+        tri2.lineTo(p2.x, p2.y);
+        tri2.lineTo(p4.x, p4.y);
+        tri2.close();
+        canvas.drawPath(tri2, redPaint);
+
+        //Drawing the blue Center Triangle
+        Path tri3 = new Path();
+        tri3.moveTo(p4.x, p4.y);
+        tri3.lineTo(p2.x, p2.y);
+        tri3.lineTo(p5.x, p5.y);
+        tri3.close();
+        canvas.drawPath(tri3, bluePaint);
+
+        //Drawing the yellow Center Triangle
+        Path tri4 = new Path();
+        tri4.moveTo(p3.x, p3.y);
+        tri4.lineTo(p2.x, p2.y);
+        tri4.lineTo(p5.x, p5.y);
+        tri4.close();
+        canvas.drawPath(tri4, yellowPaint);
+    }
+
 
     public void drawOverlapPieces(Canvas canvas, float box, float xPos, float yPos, List<Integer> indexies, ArrayList<Paint> p) {
 
@@ -536,72 +595,85 @@ public class LudoSurfaceView extends FlashSurfaceView {
                 this.isdrawn[indexies.get(2)] = true;
                 this.isdrawn[indexies.get(3)] = true;
                 break;
-            case 5: //draw five overlaping pieces
-                //TODO: IMPLEMENT THIS LATER!
+            case 5: //draw five overlapping pieces
+                //draw first piece
+                canvas.drawCircle(xPos - box / 4, yPos - box / 4, 15, whitePaint);
+                canvas.drawCircle(xPos - box / 4, yPos - box / 4, (float) 12.5, p.get(0));
+
+                //draw second piece
+                canvas.drawCircle(xPos + box / 4, yPos - box / 4, 15, whitePaint);
+                canvas.drawCircle(xPos + box / 4, yPos - box / 4, (float) 12.5, p.get(1));
+
+                //draw third piece
+                canvas.drawCircle(xPos - box / 4, yPos + box / 4, 15, whitePaint);
+                canvas.drawCircle(xPos - box / 4, yPos + box / 4, (float) 12.5, p.get(2));
+
+                //draw fourth piece
+                canvas.drawCircle(xPos + box / 4, yPos + box / 4, 15, whitePaint);
+                canvas.drawCircle(xPos + box / 4, yPos + box / 4, (float) 12.5, p.get(3));
+
+                //draw fifth piece
+                canvas.drawCircle(xPos, yPos, 15, whitePaint);
+                canvas.drawCircle(xPos, yPos, (float) 12.5, p.get(4));
                 break;
-            case 6: //draw six overlaping pieces
-                //TODO: IMPLEMENT THIS LATER!
+            case 6: //draw six overlapping pieces
+                //draw first piece
+                canvas.drawCircle(xPos - box / 4, yPos - box / 4, 12, whitePaint);
+                canvas.drawCircle(xPos - box / 4, yPos - box / 4, (float) 10, p.get(0));
+
+                //draw second piece
+                canvas.drawCircle(xPos + box / 4, yPos - box / 4, 12, whitePaint);
+                canvas.drawCircle(xPos + box / 4, yPos - box / 4, (float) 10, p.get(1));
+
+                //draw third piece
+                canvas.drawCircle(xPos - box / 4, yPos + box / 4, 12, whitePaint);
+                canvas.drawCircle(xPos - box / 4, yPos + box / 4, (float) 10, p.get(2));
+
+                //draw fourth piece
+                canvas.drawCircle(xPos + box / 4, yPos + box / 4, 12, whitePaint);
+                canvas.drawCircle(xPos + box / 4, yPos + box / 4, (float) 10, p.get(3));
+
+                //draw fifth piece
+                canvas.drawCircle(xPos - box / 4, yPos, 12, whitePaint);
+                canvas.drawCircle(xPos - box / 4, yPos, (float) 10, p.get(4));
+
+                //draw sixth piece
+                canvas.drawCircle(xPos + box / 4, yPos, 12, whitePaint);
+                canvas.drawCircle(xPos + box / 4, yPos, (float) 10, p.get(5));
                 break;
+            case 7: //draw seven overlapping pieces
+                //draw first piece
+                canvas.drawCircle(xPos - box/4, yPos - box/4, 12, whitePaint);
+                canvas.drawCircle(xPos - box/4, yPos - box/4, (float) 10, p.get(0));
+
+                //draw second piece
+                canvas.drawCircle(xPos + box/4, yPos - box/4, 12, whitePaint);
+                canvas.drawCircle(xPos + box/4, yPos - box/4, (float) 10, p.get(1));
+
+                //draw third piece
+                canvas.drawCircle(xPos - box/4, yPos + box/4, 12, whitePaint);
+                canvas.drawCircle(xPos - box/4, yPos + box/4, (float) 10, p.get(2));
+
+                //draw fourth piece
+                canvas.drawCircle(xPos + box/4, yPos + box/4, 12, whitePaint);
+                canvas.drawCircle(xPos + box/4, yPos + box/4, (float) 10, p.get(3));
+
+                //draw fifth piece
+                canvas.drawCircle(xPos - box/4, yPos, 12, whitePaint);
+                canvas.drawCircle(xPos - box/4, yPos, (float) 10, p.get(4));
+
+                //draw sixth piece
+                canvas.drawCircle(xPos + box/4, yPos, 12, whitePaint);
+                canvas.drawCircle(xPos + box/4, yPos, (float) 10, p.get(5));
+
+                //draw seventh piece
+                canvas.drawCircle(xPos, yPos, 12, whitePaint);
+                canvas.drawCircle(xPos, yPos, (float) 10, p.get(6));
+                break;
+            //Don't implement higher than seven because it is extremely improbable that more than 7 pieces
+            //would land on the same tile. Even if it did, it would just draw over each other.
         }
 
-    }
-
-    public void drawHomeBase(Canvas canvas, float box, float xPos, float yPos, Paint colorPaint, Paint whitePaint){
-        canvas.drawRect(xPos + 0, yPos + 0, xPos + (box * 6), yPos + (box * 6), colorPaint);
-        PointF d11 = new PointF(xPos + box * 3, yPos +0);
-        PointF d12 = new PointF(xPos + box * 6, yPos + box * 3);
-        PointF d13 = new PointF(xPos + (box * 3), yPos + (box * 6));
-        PointF d14 = new PointF((xPos + box * 0),  yPos + (box * 3)); //Bottom Left
-        //Drawing the red diamond
-        Path redDiamond = new Path();
-        redDiamond.moveTo(d11.x, d11.y);
-        redDiamond.lineTo(d12.x, d12.y);
-        redDiamond.lineTo(d13.x, d13.y);
-        redDiamond.lineTo(d14.x, d14.y);
-        redDiamond.close();
-        canvas.drawPath(redDiamond, whitePaint);
-        drawStartTiles(box, canvas, colorPaint, xPos + 0, yPos + 0);
-
-    }
-
-    public void drawCenterSquare(Canvas canvas, float box, Paint whitePaint, Paint redPaint, Paint greenPaint, Paint yellowPaint, Paint bluePaint){
-        canvas.drawRect((box * 6), (box * 6), (box * 9), (box * 9), whitePaint);
-        PointF p1 = new PointF((box * 6), (box * 6)); //Top Left
-        PointF p2 = new PointF((canvas.getWidth() / 2), (canvas.getWidth() / 2)); //Dead Center
-        PointF p3 = new PointF((box * 9), (box * 6)); //Top Right
-        PointF p4 = new PointF((box * 6), (box * 9)); //Bottom Left
-        PointF p5 = new PointF((box * 9), (box * 9)); //Bottom Right
-        //Drawing the green Center Triangle
-        Path tri1 = new Path();
-        tri1.moveTo(p1.x, p1.y);
-        tri1.lineTo(p2.x, p2.y);
-        tri1.lineTo(p3.x, p3.y);
-        tri1.close();
-        canvas.drawPath(tri1, greenPaint);
-
-        //Drawing the red Center Triangle
-        Path tri2 = new Path();
-        tri2.moveTo(p1.x, p1.y);
-        tri2.lineTo(p2.x, p2.y);
-        tri2.lineTo(p4.x, p4.y);
-        tri2.close();
-        canvas.drawPath(tri2, redPaint);
-
-        //Drawing the blue Center Triangle
-        Path tri3 = new Path();
-        tri3.moveTo(p4.x, p4.y);
-        tri3.lineTo(p2.x, p2.y);
-        tri3.lineTo(p5.x, p5.y);
-        tri3.close();
-        canvas.drawPath(tri3, bluePaint);
-
-        //Drawing the yellow Center Triangle
-        Path tri4 = new Path();
-        tri4.moveTo(p3.x, p3.y);
-        tri4.lineTo(p2.x, p2.y);
-        tri4.lineTo(p5.x, p5.y);
-        tri4.close();
-        canvas.drawPath(tri4, yellowPaint);
     }
 
 }

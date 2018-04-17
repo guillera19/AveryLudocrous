@@ -103,7 +103,7 @@ public class FlashSurfaceView extends SurfaceView {
         // number of milliseconds for the flash
         private int millis;
 
-        // whether the flash has compeleted
+        // whether the flash has completed
         private boolean done;
 
         /**
