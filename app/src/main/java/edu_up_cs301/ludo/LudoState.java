@@ -445,5 +445,71 @@ public class LudoState extends GameState {
         return this.canMovePiece;
     }
 
+    /**
+     * getIndexOfFirstPlayerPiece
+     * gets the token index of the first piece the player owns
+     *
+     * @param playerID
+     * @return
+     */
+    public int getIndexOfFirstPlayerPiece(int playerID) {
+        for (int i = (playerID * 4); i < (playerID * 4 + 4); i++) {//traverse through the only the pieces the player owns
+            return i;
+        }
+        return 0;
+    }
+
+    /**
+     * getIndexOfFirstPeiceInStart
+     * gets the index of the first piece in start
+     *
+     * @param playerID
+     * @return
+     */
+    public int getIndexOfFirstPieceInStart(int playerID) {
+        for (int i = (playerID * 4); i < (playerID * 4 + 4); i++) {//traverse through the only the pieces the player owns
+            if (pieces[i].getIsHome() == true) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    public int getPieceFurthestTravelled(int playerID) {
+        int furthest = 0;
+        for (int i = (playerID * 4); i < (playerID * 4 + 4); i++) {//traverse through the only the pieces the player owns
+            if (pieces[i].getNumSpacesMoved() != 57) {
+                if (pieces[i].getNumSpacesMoved() > furthest) {
+                    furthest = i;
+                }
+            }
+        }
+        if (furthest == 0) {
+            return getTokenIndexOfFirstPieceOutOfStart(playerID);
+        }
+        return furthest;
+    }
+
+
+
+
+    public int[] getOrder(int playerID) {
+        int init = playerID*4;
+        int[] order = new int[]{init+3, init+2, init+1, init};
+        int temp=0;
+        int index=0;
+        for(int i =0;i<10;i++){
+            if(pieces[order[index]].getNumSpacesMoved()>pieces[order[index+1]].getNumSpacesMoved()){
+                temp = order[index+1];
+                order[index+1] = order[index];
+                order[index] = temp;
+            }
+            index++;
+            if(index==3){index=0;}
+        }
+        return order;
+    }
+
 
 }

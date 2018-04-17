@@ -77,7 +77,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
         whitePaint2.setColor(Color.rgb(255, 255, 255));
         blackPaint.setColor(Color.rgb(0, 0, 0));
 
-
         //draw the black background
         this.setBackgroundColor(Color.BLACK);
 
@@ -112,7 +111,6 @@ public class LudoSurfaceView extends FlashSurfaceView {
                 canvas.drawRect(i, j, (float) (i + box), (float) (i + box), whitePaint2);
             }
         }
-
 
         //draw red HomeBase
         drawHomeBase(canvas, box, 0, 0, redPaint, whitePaint);

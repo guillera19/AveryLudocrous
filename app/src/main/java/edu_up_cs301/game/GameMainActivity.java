@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -52,6 +53,16 @@ public abstract class GameMainActivity extends Activity implements
 	 * --------------------------------------------------------------------
 	 */
 
+	/**
+	 External Citation
+	 Date:     April 16 2019
+	 Problem:  Did not know how to add music to App
+	 Resource: https://stackoverflow.com/questions/37244357/how-to-play-music-in-android-
+	 studio?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+	 Solution: I used the example code from this website. Some of the code below is from this website
+	 */
+	MediaPlayer wiiSportsMusic;
+
 	// A reference to the object representing the game itself. This is the
 	// object that knows the rules of the game. This variable is initialized in
 	// launchGame.
@@ -73,6 +84,7 @@ public abstract class GameMainActivity extends Activity implements
 	// whether the game is in the "configuration" stage, before the actual game
 	// has started
 	private boolean doingConfiguration = true;
+
 
 	private Button rulesButton;
 	private int numPlayers = 0;
@@ -146,6 +158,18 @@ public abstract class GameMainActivity extends Activity implements
 	@Override
 	public final void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		/**
+		 External Citation
+		 Date:     April 16 2019
+		 Problem:  Did not know how to add music to App
+		 Resource: https://stackoverflow.com/questions/37244357/how-to-play-music-in-android-
+		 studio?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+		 Solution: I used the example code from this website. Some of the code below is from this website
+		 */
+		wiiSportsMusic = MediaPlayer.create(GameMainActivity.this, R.raw.wiisports);
+		wiiSportsMusic.setLooping(true);
+		wiiSportsMusic.start();
 
 		// Initialize the layout
 		setContentView(R.layout.game_config_main);
@@ -540,6 +564,8 @@ public abstract class GameMainActivity extends Activity implements
 
 			//Start Game Button
 			case R.id.playGameButton:
+				wiiSportsMusic.stop();
+
 				String msg = startGame();
 				if (msg != null) {
 					// we have an error message

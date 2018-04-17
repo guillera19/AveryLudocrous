@@ -1,10 +1,14 @@
 package edu_up_cs301.ludo;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import edu_up_cs301.game.GameHumanPlayer;
 import edu_up_cs301.game.GameMainActivity;
@@ -20,15 +24,18 @@ import edu_up_cs301.game.infoMsg.NotYourTurnInfo;
  * specifically: which piece they want moved and if they roll a dice.
  */
 
-public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener, View.OnTouchListener {
+public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener, View.OnTouchListener, Spinner.OnItemSelectedListener {
     // to satisfy Serializable interface
     private static final long serialVersionUID = 3548793282648392873L;
     private LudoSurfaceView surfaceView;
     private Button rollDiceButton;
+    private Spinner songsSpinner;
+    private String[] songList = {"Star Wars", "Weird Russian Song", "Darude", "Attack on Titan", "Lion King"};
     // most recent state, an appropriately filled view of the game as given to us from LudoLocalGame
     private LudoState state;
     // the android activity that we are running
     private GameMainActivity myActivity;
+    MediaPlayer currentSong;
 
     /**
      * constructor
@@ -57,6 +64,25 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
         //set the listeners
         surfaceView.setOnTouchListener(this);
         rollDiceButton.setOnClickListener(this);
+
+        songsSpinner = (Spinner) activity.findViewById(R.id.spinner_Songs);
+        ArrayAdapter<String> songAdapter =
+                new ArrayAdapter<String>(activity, android.R.layout.simple_spinner_dropdown_item, songList);
+        songsSpinner.setAdapter(songAdapter);
+        songsSpinner.setOnItemSelectedListener(this);
+
+        /**
+         External Citation
+         Date:     April 16 2019
+         Problem:  Did not know how to add music to App
+         Resource: https://stackoverflow.com/questions/37244357/how-to-play-music-in-android-
+         studio?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+         Solution: I used the example code from this website. Some of the code below is from this website
+         */
+        currentSong = MediaPlayer.create(myActivity, R.raw.starwars);
+        currentSong.setLooping(true);
+        currentSong.start();
+
     }
 
     /**
@@ -187,7 +213,6 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
      * @return
      */
     public boolean checkIfAHomeBaseWasTouched(float xTouch, float yTouch, float box) {
-
         //first check if the coordinates touched were in start base or actually on the board coordinates
         if ((xTouch > (box * 0)) && (xTouch < (box * 6)) && (yTouch > (box * 0)) && (yTouch < (box * 6))) {
             return true;
@@ -218,6 +243,56 @@ public class HumanPlayer extends GameHumanPlayer implements View.OnClickListener
                 }
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        /**
+         External Citation
+         Date:     April 16 2019
+         Problem:  Did not know how to add music to App
+         Resource: https://stackoverflow.com/questions/37244357/how-to-play-music-in-android-
+         studio?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+         Solution: I used the example code from this website. Some of the code below is from this website
+         */
+        /**
+         External Citation
+         Date:     April 16 2019
+         Problem:  Needed a way to create an mp3 file from youtube.
+         Resource: https://www.onlinevideoconverter.com/mp3-converter
+         Solution: I used this website to create the mp3 file. Also, all the music is from youtube and is free.
+         */
+        if (position == 0) { //star wars
+            currentSong.stop();
+            currentSong = MediaPlayer.create(myActivity, R.raw.starwars);
+            currentSong.setLooping(true);
+            currentSong.start();
+        } else if (position == 1) { //Weird Russian Song
+            currentSong.stop();
+            currentSong = MediaPlayer.create(myActivity, R.raw.russiansong);
+            currentSong.setLooping(true);
+            currentSong.start();
+        } else if (position == 2) {//Darude
+            currentSong.stop();
+            currentSong = MediaPlayer.create(myActivity, R.raw.darude);
+            currentSong.setLooping(true);
+            currentSong.start();
+        } else if (position == 3) {//Attack on Titan
+            currentSong.stop();
+            currentSong = MediaPlayer.create(myActivity, R.raw.attackontitan);
+            currentSong.setLooping(true);
+            currentSong.start();
+        } else if (position == 4) {//Lion King
+            currentSong.stop();
+            currentSong = MediaPlayer.create(myActivity, R.raw.lionking);
+            currentSong.setLooping(true);
+            currentSong.start();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //do nothing. I don't care about this event.
     }
 
 }

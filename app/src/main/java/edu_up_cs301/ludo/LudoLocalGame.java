@@ -117,6 +117,18 @@ public class LudoLocalGame extends LocalGame {
                     checkIfGameOver();
                     return true;
                 }
+
+                //if the player rolled a six but can only move one piece
+                if(state.getDiceVal() == 6 && state.getNumMovableTokens(playerID) == 1
+                        && state.getTokenIndexOfFirstPieceInStart(playerID) == -1){
+                    state.setStillPlayersTurn(true);
+                    state.setIsRollable(false);
+                    int index = state.getTokenIndexOfFirstPieceOutOfStart(playerID);
+                    state.advanceToken(playerID, index);
+                    checkIfGameOver();
+                    return true;
+                }
+
                 //if the player rolls a six, let them take a piece out of base or move a piece
                 if(state.getDiceVal() ==6){
                     state.setStillPlayersTurn(true);
